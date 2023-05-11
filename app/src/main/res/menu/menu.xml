@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/home"
+        android:enabled="true"
+        android:icon="@drawable/icon_selection_home"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/learn"
+        android:enabled="true"
+        android:icon="@drawable/icon_selection_learn"
+        android:title="Learn"></item>
+
+    <item
+        android:id="@+id/quiz"
+        android:enabled="true"
+        android:icon="@drawable/icon_selection_quiz"
+        android:title="Quiz"></item>
+
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/icon_selection_settings"
+        android:title="Settings"></item>
+</menu>
