@@ -1,7 +1,9 @@
 package sk.upjs.wordsup.dao
 
+import androidx.annotation.WorkerThread
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import java.io.Serializable
 
 @Entity(tableName = "quizzes")
 data class Quiz(
@@ -9,8 +11,8 @@ data class Quiz(
     val quizId: Int,
     val name: String,
     val wordsNumber: Int,
-)
-
+) : Serializable
+@Entity
 data class QuizWithWords(
     @Embedded val quiz: Quiz,
     @Relation(
@@ -26,7 +28,7 @@ interface QuizDao {
 
     @Transaction
     @Query("SELECT * FROM quizzes")
-    fun getQuizWithWords(): List<QuizWithWords>
+    fun getQuizWithWords(): Flow<List<QuizWithWords>>
 
     @Query("SELECT * FROM quizzes")
     fun getQuizzes(): Flow<List<Quiz>>
@@ -36,5 +38,6 @@ interface QuizDao {
 
     @Query("DELETE FROM quizzes")
     suspend fun deleteAll()
+
 
 }

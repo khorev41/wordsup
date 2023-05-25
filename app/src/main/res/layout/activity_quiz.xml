@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QuizActivity"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/word_number_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingLeft="25dp"
+        android:text="WORD 3 OF 10"
+        android:textColor="@color/gray_text"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="45px"/>
+
+    <TextView
+        android:id="@+id/word_definition_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/word_number_textview"
+        android:fontFamily="@font/roboto_medium"
+        android:paddingTop="40dp"
+        android:textSize="45dp"
+        android:textAlignment="center"
+        android:text="definition"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/word1"
+        android:layout_marginTop="100dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_border_word"
+        android:layout_below="@+id/word_definition_textview"
+        >
+        <TextView
+            android:id="@+id/word1_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16dp"
+            android:gravity="center_vertical"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/word2"
+        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_border_word"
+        android:layout_below="@+id/word1">
+        <TextView
+            android:id="@+id/word2_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16dp"
+            android:gravity="center_vertical"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/word3"
+        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_border_word"
+        android:layout_below="@+id/word2">
+        <TextView
+            android:id="@+id/word3_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16dp"
+            android:gravity="center_vertical"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/word4"
+        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_border_word"
+        android:layout_below="@+id/word3">
+        <TextView
+            android:id="@+id/word4_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16dp"
+            android:gravity="center_vertical"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</RelativeLayout>

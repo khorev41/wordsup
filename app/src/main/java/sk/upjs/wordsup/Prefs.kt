@@ -17,10 +17,20 @@ class Prefs private constructor(context: Context) {
         get() = sharedPreferences.getString(NAME, "") ?: ""
         set(value) = sharedPreferences.edit().putString(NAME, value).apply()
 
+    var target: Int
+        get() = sharedPreferences.getInt(TARGER, 20)
+        set(value) = sharedPreferences.edit().putInt(TARGER, value).apply()
+
+    var learned: Int
+        get() = sharedPreferences.getInt(LEARNED, 0)
+        set(value) = sharedPreferences.edit().putInt(LEARNED, value).apply()
+
     companion object {
 
         private const val PREFS_FILE_NAME = "prefs"
         private const val NAME = "name"
+        private const val TARGER = "target"
+        private const val LEARNED = "learned"
 
         @Volatile
         private var instance: Prefs? = null

@@ -8,7 +8,9 @@ data class Word(
     @PrimaryKey(autoGenerate = true)
     val wordId: Int,
     val word: String,
-)
+){
+    override fun toString(): String = word
+}
 @Dao
 interface WordsDao {
 

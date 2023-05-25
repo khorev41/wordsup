@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @HiltAndroidApp
-class NamesApplication : Application()
+class WordsApplication : Application()
 
 @InstallIn(SingletonComponent::class)
 @Module
