@@ -13,6 +13,8 @@ data class Word(
 }
 @Dao
 interface WordsDao {
+    @Query("SELECT words.wordId, words.word FROM words JOIN quiz_word ON quiz_word.wordId=words.wordId WHERE quizId = :id")
+    fun getWordsByQuizId(id: Int): Flow<List<Word>>
 
     @Query("SELECT * FROM words")
     fun getWords(): Flow<List<Word>>

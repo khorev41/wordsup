@@ -27,6 +27,7 @@ class DatabaseModule {
     fun provideQuizDao(database: WordsDatabase): QuizDao {
         return database.quizDao()
     }
+
     @Provides
     fun provideTriesDao(database: WordsDatabase): TriesDao {
         return database.triesDao()
@@ -39,7 +40,7 @@ class DatabaseModule {
             appContext,
             WordsDatabase::class.java,
             "words_database"
-        ).build()
+        ).createFromAsset("database/words_database.db").fallbackToDestructiveMigration().build()
     }
 
 }
