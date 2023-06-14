@@ -52,8 +52,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-//        viewModel.insertQuiz(listOf(Quiz(1,"Family",10)))
-
         openFragment(HomeFragment.newInstance("", ""));
     }
 

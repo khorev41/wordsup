@@ -2,14 +2,14 @@
 data class Phonetic(
     val audio: String? = null,
     val text: String? = null
-)
+) : java.io.Serializable
 
 data class Definition(
     val antonyms: List<Any>? = null,
     val definition: String? = null,
     val example: String? = null,
     val synonyms: List<Any>? = null
-)
+) : java.io.Serializable
 data class Meaning(
     val definitions: List<Definition>? = null,
     val partOfSpeech: String? = null

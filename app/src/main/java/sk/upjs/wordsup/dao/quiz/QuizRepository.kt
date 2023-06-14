@@ -1,14 +1,11 @@
 package sk.upjs.wordsup.dao.quiz
 
 import android.util.Log
-import androidx.annotation.WorkerThread
-import sk.upjs.wordsup.dao.Quiz
-import sk.upjs.wordsup.dao.QuizDao
 import javax.inject.Inject
 
 class QuizRepository @Inject constructor(private val dao: QuizDao) {
 
-    val quizzes = dao.getQuizzes()
+    val quizzes = dao.getQuizzesWithWords()
 
 
     suspend fun insertQuizzes(list :List<Quiz> ) {

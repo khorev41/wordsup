@@ -1,21 +1,19 @@
-package sk.upjs.wordsup.dao
+package sk.upjs.wordsup.dao.word
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import java.io.Serializable
 
 @Entity(tableName = "words")
 data class Word(
     @PrimaryKey(autoGenerate = true)
     val wordId: Int,
-    val word: String,
-){
+    val word: String
+): Serializable {
     override fun toString(): String = word
 }
 @Dao
 interface WordsDao {
-    @Query("SELECT words.wordId, words.word FROM words JOIN quiz_word ON quiz_word.wordId=words.wordId WHERE quizId = :id")
-    fun getWordsByQuizId(id: Int): Flow<List<Word>>
-
     @Query("SELECT * FROM words")
     fun getWords(): Flow<List<Word>>
 

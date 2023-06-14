@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import sk.upjs.wordsup.R
-import sk.upjs.wordsup.dao.*
+import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizAdapter
 import sk.upjs.wordsup.dao.quiz.QuizViewModel
 
@@ -26,9 +26,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: QuizAdapter
     private val viewModel: QuizViewModel by activityViewModels<QuizViewModel>()
 
-
     private var list: List<Quiz> = emptyList()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,8 +60,6 @@ class HomeFragment : Fragment() {
         viewModel.allQuizzes.observe(viewLifecycleOwner, Observer {
                 adapter.submitList(it?.toMutableList())
             })
-        adapter.submitList(list)
-
     }
 
     private fun setGreeting(view: View) {
@@ -79,7 +75,6 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {

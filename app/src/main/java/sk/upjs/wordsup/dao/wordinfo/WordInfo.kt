@@ -1,12 +1,9 @@
 package sk.upjs.wordsup.dao.wordinfo
 
 import Phonetic
-import sk.upjs.wordsup.dao.Word
+import java.io.Serializable
 
 data class WordInfo(
-
-val word: String,
 val definitions: List<String>,
 val phonetic: Phonetic
-
-)
+) : Serializable

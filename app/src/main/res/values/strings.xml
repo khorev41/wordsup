@@ -11,4 +11,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="quizzes">Quizzes</string>
+    <string name="word_number">WORD %1$d OF %2$d</string>
 </resources>

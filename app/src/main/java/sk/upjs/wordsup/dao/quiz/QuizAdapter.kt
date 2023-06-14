@@ -1,35 +1,54 @@
 package sk.upjs.wordsup.dao.quiz
 
+import Phonetic
 import android.content.Intent
 import android.view.LayoutInflater
-
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sk.upjs.wordsup.QuizActivity
-import sk.upjs.wordsup.dao.Quiz
+import sk.upjs.wordsup.dao.wordinfo.WordInfo
 import sk.upjs.wordsup.databinding.QuizLayoutBinding
+import sk.upjs.wordsup.rest.RestApi
 
 class QuizAdapter() :
-    ListAdapter<Quiz, QuizAdapter.QuizViewHolder>(DiffCallback) {
+    ListAdapter<QuizWithWords, QuizAdapter.QuizViewHolder>(DiffCallback) {
 
     class QuizViewHolder(val binding: QuizLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
         fun bind(
-            quiz: Quiz
+            quiz: QuizWithWords,
         ) {
-
             binding.root.setOnClickListener {
-                val intent = Intent(it.context,QuizActivity::class.java)
+                val intent = Intent(it.context, QuizActivity::class.java)
                 intent.putExtra("quiz", quiz)
                 it.context.startActivity(intent)
             }
 
-            binding.quizName.text = quiz.name
-            binding.quizNumber.text = "Number of words: "  + quiz.wordsNumber.toString()
+            binding.quizName.text = quiz.quiz.name
+            binding.quizNumber.text = "Number of words: " + quiz.words.size.toString()
+        }
+
+        private suspend fun getDefinition(quiz: QuizWithWords): WordInfo {
+            var definitions = mutableListOf<String>()
+            var phonetic = Phonetic()
+
+            val response = RestApi.wordsRestDao.getDictionaryData(quiz.words[0].word)
+            response.forEach { responseModel ->
+                responseModel.meanings?.forEach { meaning ->
+                    meaning.definitions?.forEach {
+                        definitions.add(it.definition.toString())
+                    }
+                }
+                responseModel.phonetics?.forEach {
+                    if (it.audio?.contains("uk") == true) {
+                        phonetic = it
+                    }
+                }
+            }
+            return WordInfo(definitions, phonetic)
         }
     }
 
@@ -45,13 +64,15 @@ class QuizAdapter() :
     }
 
 
-    object DiffCallback : DiffUtil.ItemCallback<Quiz>() {
+    object DiffCallback : DiffUtil.ItemCallback<QuizWithWords>() {
         // ak obe polozky equals
         // ak dva objekty reprezentuju rovnaku polozku
-        override fun areItemsTheSame(oldItem: Quiz, newItem: Quiz) = oldItem == newItem
+        override fun areItemsTheSame(oldItem: QuizWithWords, newItem: QuizWithWords) =
+            oldItem == newItem
 
         // ak dva objekty maju rovnaky obsah
-        override fun areContentsTheSame(oldItem: Quiz, newItem: Quiz) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: QuizWithWords, newItem: QuizWithWords) =
+            oldItem == newItem
 
     }
 

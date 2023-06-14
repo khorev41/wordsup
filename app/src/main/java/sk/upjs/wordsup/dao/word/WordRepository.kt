@@ -1,6 +1,5 @@
 package sk.upjs.wordsup.dao.word
 
-import sk.upjs.wordsup.dao.WordsDao
 import javax.inject.Inject
 
 class WordRepository @Inject constructor(private val dao: WordsDao) {
@@ -14,6 +13,6 @@ class WordRepository @Inject constructor(private val dao: WordsDao) {
 //        } catch (e: Exception) {
 //            Log.e("QUIZREPOSITORY", e.toString())
 //        }
-//    }
+//    }WordsDefinition.kt
 
 }

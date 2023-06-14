@@ -1,8 +1,8 @@
-package sk.upjs.wordsup.dao
+package sk.upjs.wordsup.dao.quiz
 
-import androidx.annotation.WorkerThread
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import sk.upjs.wordsup.dao.word.Word
 import java.io.Serializable
 
 @Entity(tableName = "quizzes")
@@ -10,9 +10,13 @@ data class Quiz(
     @PrimaryKey(autoGenerate = true)
     val quizId: Int,
     val name: String,
-    val wordsNumber: Int,
-) : Serializable
-@Entity
+    ) : Serializable
+
+@Entity(primaryKeys = ["quizId", "wordId"])
+data class QuizWordCrossRef(
+    val wordId: Int,
+    val quizId: Int,
+)
 data class QuizWithWords(
     @Embedded val quiz: Quiz,
     @Relation(
@@ -21,14 +25,14 @@ data class QuizWithWords(
         associateBy = Junction(QuizWordCrossRef::class)
     )
     val words: List<Word>
-)
+) : Serializable
 
 @Dao
 interface QuizDao {
 
     @Transaction
     @Query("SELECT * FROM quizzes")
-    fun getQuizWithWords(): Flow<List<QuizWithWords>>
+    fun getQuizzesWithWords(): Flow<List<QuizWithWords>>
 
     @Query("SELECT * FROM quizzes")
     fun getQuizzes(): Flow<List<Quiz>>
