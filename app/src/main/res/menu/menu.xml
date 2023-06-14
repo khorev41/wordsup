@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/home"
@@ -12,17 +11,17 @@
         android:id="@+id/learn"
         android:enabled="true"
         android:icon="@drawable/icon_selection_learn"
-        android:title="Learn"></item>
+        android:title="Learn" />
 
     <item
         android:id="@+id/quiz"
         android:enabled="true"
         android:icon="@drawable/icon_selection_quiz"
-        android:title="Quiz"></item>
+        android:title="Quiz" />
 
     <item
         android:id="@+id/settings"
         android:enabled="true"
         android:icon="@drawable/icon_selection_settings"
-        android:title="Settings"></item>
+        android:title="Settings" />
 </menu>
