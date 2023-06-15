@@ -1,19 +1,18 @@
 package sk.upjs.wordsup.fragments
 
-import sk.upjs.wordsup.Prefs
+import android.content.res.Resources
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import sk.upjs.wordsup.Prefs
 import sk.upjs.wordsup.R
-import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizAdapter
 import sk.upjs.wordsup.dao.quiz.QuizViewModel
 
@@ -23,10 +22,8 @@ private const val ARG_PARAM2 = "param2"
 class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var adapter: QuizAdapter
-    private val viewModel: QuizViewModel by activityViewModels<QuizViewModel>()
+    private val viewModel: QuizViewModel by activityViewModels()
 
-    private var list: List<Quiz> = emptyList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,11 +33,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setGreeting(this.requireView())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         setGreeting(view)
@@ -56,22 +57,21 @@ class HomeFragment : Fragment() {
         val adapter = QuizAdapter()
         recyclerView.adapter = adapter
 
-
-        viewModel.allQuizzes.observe(viewLifecycleOwner, Observer {
-                adapter.submitList(it?.toMutableList())
-            })
+        viewModel.allQuizzes.observe(viewLifecycleOwner) {
+            adapter.submitList(it?.toMutableList())
+        }
     }
 
     private fun setGreeting(view: View) {
 
         val name = Prefs.getInstance(requireContext()).name
-        view.findViewById<TextView>(R.id.greetingTextView).setText("Hello, $name")
+        view.findViewById<TextView>(R.id.greetingTextView).text = resources.getString(R.string.greetings_text, name)
 
         val target = Prefs.getInstance(requireContext()).target
         val done = Prefs.getInstance(requireContext()).learned
         val percent = ((done.toDouble() / target) * 100).toInt()
-        view.findViewById<TextView>(R.id.progressTextView).setText("You have learned $percent% of words today")
-        view.findViewById<ProgressBar>(R.id.progress_circular).setProgress(50)
+        view.findViewById<TextView>(R.id.progressTextView).text = resources.getString(R.string.progress_text, percent)
+        view.findViewById<ProgressBar>(R.id.progress_circular).progress = percent
     }
 
     companion object {

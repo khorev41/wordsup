@@ -8,4 +8,6 @@
     <color name="background">#FFFBFE</color>
     <color name="surface_variant">#E7E0EC</color>
     <color name="gray_text">#858494</color>
+    <color name="red_error">#ff6666</color>
+    <color name="green_good">#53df83</color>
 </resources>

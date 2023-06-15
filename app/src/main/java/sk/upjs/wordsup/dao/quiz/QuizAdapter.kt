@@ -31,25 +31,6 @@ class QuizAdapter() :
             binding.quizNumber.text = "Number of words: " + quiz.words.size.toString()
         }
 
-        private suspend fun getDefinition(quiz: QuizWithWords): WordInfo {
-            var definitions = mutableListOf<String>()
-            var phonetic = Phonetic()
-
-            val response = RestApi.wordsRestDao.getDictionaryData(quiz.words[0].word)
-            response.forEach { responseModel ->
-                responseModel.meanings?.forEach { meaning ->
-                    meaning.definitions?.forEach {
-                        definitions.add(it.definition.toString())
-                    }
-                }
-                responseModel.phonetics?.forEach {
-                    if (it.audio?.contains("uk") == true) {
-                        phonetic = it
-                    }
-                }
-            }
-            return WordInfo(definitions, phonetic)
-        }
     }
 
 

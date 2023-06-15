@@ -2,6 +2,9 @@ package sk.upjs.wordsup.dao.wordinfo
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.dao.WordsByQuiz.WordsDefinitionRepository
@@ -10,22 +13,14 @@ import javax.inject.Inject
 @HiltViewModel
 class WordsDefinitionViewModel @Inject constructor(private val repository: WordsDefinitionRepository) : ViewModel() {
 
-     fun getWordsInfos(list: List<Word>): LiveData<MutableMap<String, WordInfo>> {
-        val result = MutableLiveData<MutableMap<String, WordInfo>>()
-        viewModelScope.launch {
-            val res = repository.getWordsInfos(list)
-            result.postValue(res)
-        }
-        return result
-    }
+    private val _wordsInfos = MutableLiveData<MutableList<WordInfo>>()
+    val wordsInfos: LiveData<MutableList<WordInfo>> = _wordsInfos
 
-    fun getWordInfo(word: Word): LiveData<WordInfo>{
-        val result = MutableLiveData<WordInfo>()
-        viewModelScope.launch {
-            val res = repository.getWordInfo(word)
-            result.postValue(res)
+    fun getWordsInfos(list: List<Word>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repository.getWordsInfos(list)
+            _wordsInfos.postValue(result.value)
         }
-        return result
     }
 
     class WordsByQuizViewModelFactory(private val repository: WordsDefinitionRepository) : ViewModelProvider.Factory {
