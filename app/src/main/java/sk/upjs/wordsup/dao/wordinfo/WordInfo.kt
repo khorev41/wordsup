@@ -1,5 +1,6 @@
 package sk.upjs.wordsup.dao.wordinfo
 
+
 import Phonetic
 import java.io.Serializable
 

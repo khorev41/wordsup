@@ -3,21 +3,12 @@ package sk.upjs.wordsup
 import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
-import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.dao.wordinfo.WordInfo
 import sk.upjs.wordsup.dao.wordinfo.WordsDefinitionViewModel
 

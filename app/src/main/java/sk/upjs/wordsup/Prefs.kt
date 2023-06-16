@@ -18,8 +18,8 @@ class Prefs private constructor(context: Context) {
         set(value) = sharedPreferences.edit().putString(NAME, value).apply()
 
     var target: Int
-        get() = sharedPreferences.getInt(TARGER, 20)
-        set(value) = sharedPreferences.edit().putInt(TARGER, value).apply()
+        get() = sharedPreferences.getInt(TARGET, 0)
+        set(value) = sharedPreferences.edit().putInt(TARGET, value).apply()
 
     var learned: Int
         get() = sharedPreferences.getInt(LEARNED, 0)
@@ -29,7 +29,7 @@ class Prefs private constructor(context: Context) {
 
         private const val PREFS_FILE_NAME = "prefs"
         private const val NAME = "name"
-        private const val TARGER = "target"
+        private const val TARGET = "target"
         private const val LEARNED = "learned"
 
         @Volatile

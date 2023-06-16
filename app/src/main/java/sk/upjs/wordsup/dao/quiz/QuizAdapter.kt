@@ -1,6 +1,5 @@
 package sk.upjs.wordsup.dao.quiz
 
-import Phonetic
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,9 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sk.upjs.wordsup.QuizActivity
-import sk.upjs.wordsup.dao.wordinfo.WordInfo
 import sk.upjs.wordsup.databinding.QuizLayoutBinding
-import sk.upjs.wordsup.rest.RestApi
 
 class QuizAdapter() :
     ListAdapter<QuizWithWords, QuizAdapter.QuizViewHolder>(DiffCallback) {

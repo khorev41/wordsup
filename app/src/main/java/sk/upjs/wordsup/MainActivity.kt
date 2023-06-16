@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
-                    openFragment(HomeFragment.newInstance("", ""))
+                    openFragment(HomeFragment.newInstance())
                     true
                 }
                 R.id.learn -> {
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.quiz -> {
-                    openFragment(QuizFragment.newInstance("", ""))
+                    openFragment(QuizFragment.newInstance())
                     true
                 }
                 R.id.settings -> {
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        openFragment(HomeFragment.newInstance("", ""));
+        openFragment(HomeFragment.newInstance());
     }
 
     fun openFragment(fragment: Fragment?) {

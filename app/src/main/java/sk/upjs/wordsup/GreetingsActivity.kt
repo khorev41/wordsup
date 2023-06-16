@@ -25,20 +25,33 @@ class GreetingsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val name = Prefs.getInstance(applicationContext).name
+        val target = Prefs.getInstance(applicationContext).target
+        if (name != "" && target == 0){
+            applicationContext.startActivity(
+                Intent(
+                    this, TargetActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+            finish()
+        }
+        if(name != "" && target != 0){
+            applicationContext.startActivity(
+                Intent(
+                    this, MainActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+            finish()
+        }
+
         setContent {
-            if (Prefs.getInstance(LocalContext.current).name != "") {
-                LocalContext.current.startActivity(
-                    Intent(
-                        LocalContext.current, MainActivity::class.java
-                    )
-                )
-            }
-            MainContent()
+            GreetingsActivity()
         }
     }
 
     @Composable
-    private fun MainContent() {
+    private fun GreetingsActivity() {
 
         WordsUpTheme {
             Surface(
