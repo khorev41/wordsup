@@ -7,8 +7,8 @@ import java.util.*
 @Entity(tableName = "tries")
 data class Try(
     @PrimaryKey(autoGenerate = true)
-    val tryId: Int,
-    val quizId: Int,
+    val tryId: Long,
+    val quizId: Long,
     val correctWords: Int,
     val time: Date
 

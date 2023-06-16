@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditQuizActivity">
+
+    <RelativeLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/quiz_edit"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"/>
+
+        <Button
+            android:id="@+id/save_quiz_button"
+            style="@style/Widget.Material3.Button.TonalButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15sp"
+            android:layout_marginTop="15sp"
+            android:layout_marginBottom="15sp"
+            android:text="@string/save"
+            app:icon="@drawable/baseline_save_24" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topLayout">
+
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:id="@+id/name_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/quiz_name"
+            app:helperText="Required"
+            android:layout_marginHorizontal="20sp"
+>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_text_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RelativeLayout
+            android:id="@+id/word_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:layout_below="@id/name_text_layout">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/word_text_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="60sp"
+                android:layout_marginLeft="20sp"
+                android:hint="@string/enter_word_to_add_in_quiz"
+                android:layout_alignRight="@id/add_word_button">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/word_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:layout_marginTop="17sp"
+                android:layout_centerVertical="true"
+                android:id="@+id/add_word_button"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30sp"
+                android:layout_alignParentRight="true"
+                app:icon="@drawable/baseline_add_24"/>
+
+        </RelativeLayout>
+
+
+        <ListView
+            android:id="@+id/word_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/word_layout"
+            android:layout_marginHorizontal="35sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="50sp"
+            android:scrollbars="none"
+            android:divider="#00000000"
+            android:dividerHeight="10dp"
+            tools:listitem="@layout/word_item_layout"
+            android:focusable="false"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

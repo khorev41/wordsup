@@ -8,23 +8,23 @@ import java.io.Serializable
 @Entity(tableName = "quizzes")
 data class Quiz(
     @PrimaryKey(autoGenerate = true)
-    val quizId: Int,
-    val name: String,
-    ) : Serializable
+    val quizId: Long,
+    var name: String,
+) : Serializable
 
 @Entity(primaryKeys = ["quizId", "wordId"])
 data class QuizWordCrossRef(
-    val wordId: Int,
-    val quizId: Int,
+    val wordId: Long,
+    val quizId: Long,
 )
 data class QuizWithWords(
-    @Embedded val quiz: Quiz,
+    @Embedded var quiz: Quiz,
     @Relation(
         parentColumn = "quizId",
         entityColumn = "wordId",
         associateBy = Junction(QuizWordCrossRef::class)
     )
-    val words: List<Word>
+    var words: List<Word>,
 ) : Serializable
 
 @Dao
@@ -37,8 +37,22 @@ interface QuizDao {
     @Query("SELECT * FROM quizzes")
     fun getQuizzes(): Flow<List<Quiz>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(quizzes: List<Quiz>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertQuizWithWords(quizWithWords: QuizWithWords) {
+        insert(listOf(quizWithWords.quiz))
+        insertWords(quizWithWords.words).forEach {
+            insertQuizWordCrossRef(QuizWordCrossRef(it, quizWithWords.quiz.quizId))
+        }
+    }
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWords(words: List<Word>): List<Long>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertQuizWordCrossRef(quizWordCrossRef: QuizWordCrossRef)
 
     @Query("DELETE FROM quizzes")
     suspend fun deleteAll()

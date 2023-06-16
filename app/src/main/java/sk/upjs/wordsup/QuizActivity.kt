@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
 import sk.upjs.wordsup.dao.wordinfo.WordInfo
 import sk.upjs.wordsup.dao.wordinfo.WordsDefinitionViewModel
+import sk.upjs.wordsup.fragments.QuizPlayFragment
 
 @Suppress("DEPRECATION")
 @AndroidEntryPoint

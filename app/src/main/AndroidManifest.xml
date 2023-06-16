@@ -16,8 +16,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".EditQuizActivity"
+            android:exported="true"/>
+        <activity
             android:name=".QuizActivity"
-            android:exported="true" />
+            android:exported="true"/>
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
