@@ -61,4 +61,15 @@
     <string name="quiz_edit">Quiz edit</string>
     <string name="enter_word_to_add_in_quiz">Enter word to add in quiz</string>
     <string name="ahoj_svet">Ahoj,svet</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="changes_will_not_be_saved">Changes will not be saved. Do you want to exit?</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="all_words">All words</string>
+    <string name="enter_word_to_search">Enter word to search</string>
+    <string name="phonetic">phonetic</string>
+    <string name="no_phonetics">Sorry, no phonetics)</string>
+    <string name="definitions">Definitions:</string>
+    <string name="first_fragment">first_fragment</string>
+    <string name="home_fragment">home_fragment</string>
 </resources>

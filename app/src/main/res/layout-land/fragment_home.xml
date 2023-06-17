@@ -49,7 +49,7 @@
             </RelativeLayout>
 
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/greetingTextView"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"

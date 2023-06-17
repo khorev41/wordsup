@@ -12,7 +12,9 @@ data class Quiz(
     var name: String,
 ) : Serializable
 
-@Entity(primaryKeys = ["quizId", "wordId"])
+@Entity(
+    primaryKeys = ["quizId", "wordId"]
+)
 data class QuizWordCrossRef(
     val wordId: Long,
     val quizId: Long,
@@ -37,19 +39,33 @@ interface QuizDao {
     @Query("SELECT * FROM quizzes")
     fun getQuizzes(): Flow<List<Quiz>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(quizzes: List<Quiz>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuizzes(quizzes: List<Quiz>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertQuizWithWords(quizWithWords: QuizWithWords) {
-        insert(listOf(quizWithWords.quiz))
-        insertWords(quizWithWords.words).forEach {
-            insertQuizWordCrossRef(QuizWordCrossRef(it, quizWithWords.quiz.quizId))
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuiz(quiz: Quiz): Long
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertWord(words: Word): Long
+
+    @Query("SELECT * FROM words WHERE word = :w")
+    suspend fun getWord(w: String): Word
+
+    suspend fun insertQuizWithWords(quiz: QuizWithWords) {
+        var quizID = quiz.quiz.quizId
+        if (quiz.quiz.quizId == 0L) {
+            quizID = insertQuiz(quiz.quiz)
+        }
+        quiz.words.forEach {
+            if (it.wordId == 0L) {
+                insertWord(it)
+                insertQuizWordCrossRef(QuizWordCrossRef(getWord(it.word).wordId,quizID))
+            }else{
+                insertQuizWordCrossRef(QuizWordCrossRef(it.wordId,quizID))
+            }
         }
     }
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertWords(words: List<Word>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertQuizWordCrossRef(quizWordCrossRef: QuizWordCrossRef)

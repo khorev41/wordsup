@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
+    android:tag="@string/home_fragment"
     tools:context=".fragments.SettingsFragment">
 
 
@@ -31,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="You have learned 83% of words today">
+                    android:text="@string/progress_text">
 
                 </TextView>
 
@@ -39,7 +40,7 @@
                     android:id="@+id/progress_circular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerHorizontal="true"
                     app:trackColor="@color/surface_variant"
                     android:progress="83"
@@ -49,13 +50,13 @@
             </RelativeLayout>
 
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/greetingTextView"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:gravity="center"
-                android:text="Hello, name"
-                android:textSize="24dp"
+                android:text="@string/greetings_text"
+                android:textSize="24sp"
                 app:fontFamily="@font/roboto_bold" />
 
 
@@ -66,9 +67,9 @@
             android:layout_height="wrap_content"
             android:text="@string/quizzes"
             android:fontFamily="@font/roboto_medium"
-            android:textSize="20dp"
+            android:textSize="20sp"
 
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginStart="20dp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="10sp"
             android:layout_marginHorizontal="20sp"

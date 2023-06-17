@@ -1,64 +1,54 @@
-package sk.upjs.wordsup.dao.word
+package sk.upjs.wordsup.dao.quiz
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.TextView
-import sk.upjs.wordsup.R
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import sk.upjs.wordsup.dao.word.Word
+import sk.upjs.wordsup.databinding.WordItemLayoutBinding
 
-class WordAdapter(private val context: Context, private val itemList: MutableList<Word>) : BaseAdapter(), java.io.Serializable {
+class WordAdapter() : ListAdapter<Word, WordAdapter.WordViewHolder>(DiffCallback), java.io.Serializable {
 
+    private var itemList = mutableListOf<Word>()
     private var toDelete = mutableListOf<Word>()
 
-    fun getToDelete(): MutableList<Word> {
-        return toDelete
-    }
     fun getItemList(): MutableList<Word>{
         return itemList
     }
-
-    override fun getCount(): Int {
-        return itemList.size
+    fun getToDelete(): MutableList<Word> {
+        return toDelete
     }
 
-    override fun getItem(position: Int): Any {
-        return itemList[position]
-    }
+    class WordViewHolder(val binding: WordItemLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+        fun bind(word: Word) {
+            binding.wordString.text = word.word
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View
-        val viewHolder: ViewHolder
-
-        if (convertView == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.word_item_layout, parent, false)
-            viewHolder = ViewHolder(view)
-            view.tag = viewHolder
-        } else {
-            view = convertView
-            viewHolder = view.tag as ViewHolder
         }
-
-        viewHolder.textViewTitle.text = getItem(position).toString()
-
-        view.findViewById<ImageView>(R.id.word_delete_button).setOnClickListener {
-            toDelete.add(getItem(position) as Word)
-            itemList.removeAt(position)
-            this.notifyDataSetChanged()
-        }
-
-        return view
     }
 
-    private class ViewHolder(view: View) {
-        val textViewTitle: TextView = view.findViewById(R.id.word_string)
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+        return WordItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            .let { WordViewHolder(it) }
+    }
+
+    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+
+    object DiffCallback : DiffUtil.ItemCallback<Word>() {
+        // ak obe polozky equals
+        // ak dva objekty reprezentuju rovnaku polozku
+        override fun areItemsTheSame(oldItem: Word, newItem: Word) = oldItem == newItem
+
+        // ak dva objekty maju rovnaky obsah
+        override fun areContentsTheSame(oldItem: Word, newItem: Word) = oldItem == newItem
 
     }
+
 }
+

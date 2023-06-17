@@ -5,10 +5,11 @@ import kotlinx.coroutines.flow.Flow
 import sk.upjs.wordsup.dao.quiz.QuizWordCrossRef
 import java.io.Serializable
 
-@Entity(tableName = "words")
+@Entity(tableName = "words",indices = [Index(value = ["word"], unique = true)])
 data class Word(
     @PrimaryKey(autoGenerate = true)
     val wordId: Long,
+    @ColumnInfo(name = "word")
     val word: String
 ): Serializable {
     override fun toString(): String = word
@@ -34,14 +35,19 @@ interface WordsDao {
     @Query("SELECT * FROM words")
     fun getWords(): Flow<List<Word>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(words: List<Word>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(words: List<Word>) : List<Long>
 
     @Query("DELETE FROM words")
     suspend fun deleteAll()
 
+    @Query("SELECT * from QuizWordCrossRef WHERE wordId = :w")
+    suspend fun getQuizWordCrossRefByWordId(w: Long) : List<QuizWordCrossRef>
     @Delete
     suspend fun deleteWords(words: List<Word>)
+
+    @Query("DELETE FROM words WHERE wordId = :w")
+    suspend fun deleteWordById(w: Long)
 
     @Delete
     suspend fun deleteQuizWordCrossRefs(quizWordCrossRefs: List<QuizWordCrossRef>)

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizViewModel
 import sk.upjs.wordsup.fragments.HomeFragment
 import sk.upjs.wordsup.fragments.LearnFragment
@@ -16,8 +17,6 @@ import sk.upjs.wordsup.fragments.SettingsFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigation: BottomNavigationView
-
-    private val  viewModel: QuizViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +59,23 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, fragment!!)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.fragments.last() is HomeFragment) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+
+
+
+        when (supportFragmentManager.fragments.last()) {
+            is HomeFragment -> bottomNavigation.selectedItemId = R.id.home
+            is LearnFragment -> bottomNavigation.selectedItemId = R.id.learn
+            is QuizFragment -> bottomNavigation.selectedItemId = R.id.quiz
+            is SettingsFragment -> bottomNavigation.selectedItemId = R.id.settings
+        }
     }
 
 }

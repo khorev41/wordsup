@@ -45,3 +45,4 @@ class DatabaseModule {
         ).createFromAsset("database/words_database.db").fallbackToDestructiveMigration().build()
     }
 }
+

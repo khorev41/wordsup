@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:layout_marginVertical="5sp">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/word_string"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,7 +12,7 @@
         android:textSize="20sp">
 
 
-    </com.google.android.material.textview.MaterialTextView>
+    </TextView>
 
     <RelativeLayout
         android:layout_width="48dp"

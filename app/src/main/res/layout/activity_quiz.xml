@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        >
+        tools:ignore="UselessParent">
 
        <RelativeLayout
            android:layout_width="match_parent"
@@ -38,22 +38,37 @@
                android:textAlignment="center"
                android:layout_centerHorizontal="true"
                android:layout_marginBottom="400sp"
-               android:textSize="20sp"
-               />
+               android:textSize="20sp" />
 
        </RelativeLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/start_quiz"
-            android:layout_width="350sp"
-            android:text="@string/start_quiz"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50sp"
-            android:background="@drawable/rounded_border_word"
             android:layout_gravity="center_horizontal|bottom"
-            >
+            android:layout_marginBottom="50sp">
 
-        </com.google.android.material.button.MaterialButton>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/start_quiz"
+                android:layout_width="350sp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_border_word"
+                android:contentDescription="@string/ahoj_svet"
+                android:enabled="false" />
+
+
+            <ProgressBar
+                android:id="@+id/loading_circle"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:indeterminate="true" />
+
+
+        </RelativeLayout>
+
 
     </FrameLayout>
 
