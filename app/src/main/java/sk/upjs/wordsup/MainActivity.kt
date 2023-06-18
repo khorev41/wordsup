@@ -5,14 +5,19 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizViewModel
+import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.fragments.HomeFragment
 import sk.upjs.wordsup.fragments.LearnFragment
 import sk.upjs.wordsup.fragments.QuizFragment
 import sk.upjs.wordsup.fragments.SettingsFragment
+import sk.upjs.wordsup.rest.RestApi
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +26,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        lifecycleScope.launch {
+//            RestApi.wordsRestDao.getDictionaryData("baba")
+//        }
 
 
         bottomNavigation = findViewById(R.id.bottom_navigation)

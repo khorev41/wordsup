@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.FinishQuizFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/good_job"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="Good Job!"
+            android:textSize="24sp"
+            app:fontFamily="@font/roboto_bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="300sp"
+            android:layout_marginHorizontal="30sp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/cards_color">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/prize"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/quizName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="You have completed the quiz"
+                        android:textColor="@color/primary"
+                        android:textSize="24sp"
+                        app:fontFamily="@font/roboto_bold" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="100sp">
+
+            <!-- Section 1 -->
+            <LinearLayout
+                android:id="@+id/section1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="30sp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/section3"
+                app:layout_constraintEnd_toStartOf="@+id/section2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="CORRECT ANSWERS"
+                    android:textColor="@color/gray_text"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/correct_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="15sp"
+                    android:text="@string/number_words"
+                    android:textSize="20sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+            </LinearLayout>
+
+            <!-- Section 2 -->
+            <LinearLayout
+                android:id="@+id/section2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/section4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/section1"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/completion"
+                    android:textColor="@color/gray_text"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/completion_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="15sp"
+                    android:text="@string/completion_percentage"
+                    android:textSize="20sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+            </LinearLayout>
+
+            <!-- Section 3 -->
+            <LinearLayout
+                android:id="@+id/section3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="30sp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/section4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/section1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/skipped"
+                    android:textColor="@color/gray_text"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/skipped_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="15sp"
+                    android:text="@string/skipped_number"
+                    android:textSize="20sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+            </LinearLayout>
+
+            <!-- Section 4 -->
+            <LinearLayout
+                android:id="@+id/section4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/section3"
+                app:layout_constraintTop_toBottomOf="@+id/section2">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="INCORRECT"
+                    android:textColor="@color/gray_text"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/incorrect_answers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="15sp"
+                    android:text="@string/skipped_number"
+                    android:textSize="20sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/done_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_border_word"
+            android:text="@string/done" />
+    </RelativeLayout>
+
+</FrameLayout>

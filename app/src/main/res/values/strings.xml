@@ -72,4 +72,14 @@
     <string name="definitions">Definitions:</string>
     <string name="first_fragment">first_fragment</string>
     <string name="home_fragment">home_fragment</string>
+    <string name="number_words">%1$d WORDS</string>
+    <string name="correct_answers">CORRECT ANSWERS</string>
+    <string name="completion">COMPLETION</string>
+    <string name="completion_percentage">%1$d%%</string>
+    <string name="skipped">SKIPPED</string>
+    <string name="skipped_number">%1$d</string>
+    <string name="done">Done</string>
+    <string name="incorrect">INCORRECT</string>
+    <string name="definition_not_found">Sorry, we didn\'t find a definition for this word</string>
+    <string name="definition_not_found_with_word">Sorry, we didn\'t find a definition for %1$s. Just skip it!</string>
 </resources>

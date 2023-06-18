@@ -23,7 +23,7 @@
             android:exported="true" />
         <activity
             android:name=".QuizActivity"
-            android:exported="true" />
+            android:exported="true"/>
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

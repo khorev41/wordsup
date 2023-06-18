@@ -10,6 +10,7 @@ import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import sk.upjs.wordsup.dao.quiz.QuizDao
+import sk.upjs.wordsup.dao.tries.TryDao
 import sk.upjs.wordsup.dao.word.WordsDao
 import javax.inject.Singleton
 
@@ -31,7 +32,7 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideTriesDao(database: WordsDatabase): TriesDao {
+    fun provideTriesDao(database: WordsDatabase): TryDao {
         return database.triesDao()
     }
 

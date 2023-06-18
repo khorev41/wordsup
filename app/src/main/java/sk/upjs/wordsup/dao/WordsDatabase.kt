@@ -6,6 +6,9 @@ import androidx.room.TypeConverters
 import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizDao
 import sk.upjs.wordsup.dao.quiz.QuizWordCrossRef
+import sk.upjs.wordsup.dao.tries.Converters
+import sk.upjs.wordsup.dao.tries.Try
+import sk.upjs.wordsup.dao.tries.TryDao
 import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.dao.word.WordsDao
 
@@ -15,5 +18,5 @@ abstract class WordsDatabase : RoomDatabase() {
 
     abstract fun wordsDao(): WordsDao
     abstract fun quizDao(): QuizDao
-    abstract fun triesDao(): TriesDao
+    abstract fun triesDao(): TryDao
 }

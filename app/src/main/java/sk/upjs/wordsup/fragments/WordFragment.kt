@@ -13,8 +13,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import sk.upjs.wordsup.R
-import sk.upjs.wordsup.dao.wordinfo.DefinitionAdapter
 import sk.upjs.wordsup.dao.word.Word
+import sk.upjs.wordsup.dao.wordinfo.DefinitionAdapter
 import sk.upjs.wordsup.dao.wordinfo.WordInfo
 
 
@@ -24,7 +24,7 @@ class WordFragment : Fragment() {
     private lateinit var wordInfo: WordInfo
 
     private val mediaPlayer = MediaPlayer()
-    private var isPrepared = false;
+    private var isPrepared = false
 
     private lateinit var wordTextView: TextView
     private lateinit var phoneticTextView: TextView
@@ -64,18 +64,18 @@ class WordFragment : Fragment() {
         listenButton = requireView().findViewById(R.id.listen_button)
         recyclerView = requireView().findViewById(R.id.definition_recycler_view)
 
-        if(!wordInfo.phonetic.audio.isNullOrBlank()){
-            mediaPlayer.reset();
+        if (!wordInfo.phonetic.audio.isNullOrBlank()) {
+            mediaPlayer.reset()
             mediaPlayer.setDataSource(wordInfo.phonetic.audio)
             mediaPlayer.prepareAsync()
 
             mediaPlayer.setOnCompletionListener {
-                mediaPlayer.reset();
+                mediaPlayer.reset()
                 mediaPlayer.setDataSource(wordInfo.phonetic.audio)
                 mediaPlayer.prepareAsync()
             }
-            mediaPlayer.setOnPreparedListener { mp ->
-                isPrepared = true;
+            mediaPlayer.setOnPreparedListener {
+                isPrepared = true
             }
         }else{
             listenButton.isVisible = false
@@ -105,8 +105,6 @@ class WordFragment : Fragment() {
             }
         }
     }
-
-
 
     companion object {
 

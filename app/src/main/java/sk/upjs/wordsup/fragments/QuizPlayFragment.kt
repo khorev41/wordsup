@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction.*
 import com.google.android.material.button.MaterialButton
 import sk.upjs.wordsup.Prefs
 import sk.upjs.wordsup.R
@@ -31,6 +32,7 @@ class QuizPlayFragment : Fragment() {
     private var listOfWordCheckMark = listOf<ImageView>()
     private var listOfWordTextView = listOf<TextView>()
     private var wordsTry = MutableList(4) { 0 }
+    private lateinit var answers: MutableList<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,7 @@ class QuizPlayFragment : Fragment() {
             wordInfo = arguments?.getSerializable("wordInfo") as MutableList<WordInfo>
             words = quiz.words
         }
+        answers = MutableList(words.size) { 0 }
         shuffled = getRandomList(words[counter])
     }
 
@@ -58,6 +61,7 @@ class QuizPlayFragment : Fragment() {
         outState.putInt("counter", counter)
         outState.putSerializable("shuffled", shuffled as Serializable)
         outState.putSerializable("wordsTry", wordsTry as Serializable)
+        outState.putSerializable("answers", answers as Serializable)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -70,6 +74,7 @@ class QuizPlayFragment : Fragment() {
             mapOfDefinitions = it.getSerializable("mapOfDefinitions") as MutableMap<Int, Int>
             shuffled = it.getSerializable("shuffled") as List<Word>
             wordsTry = it.getSerializable("wordsTry") as MutableList<Int>
+            answers = it.getSerializable("answers") as MutableList<Int>
         }
         initializeButtonsAfterStateRestored(wordsTry)
     }
@@ -83,15 +88,26 @@ class QuizPlayFragment : Fragment() {
         setWords(shuffled)
 
         nextButton.setOnClickListener {
+
+
             unlockOtherButton()
             counter++
             if (counter == words.size) {
-                activity?.finish()
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(
+                    R.id.fragment_container, FinishQuizFragment.newInstance(answers,quiz)
+                )
+                transaction.addToBackStack(null)
+                transaction.setTransition(TRANSIT_FRAGMENT_FADE)
+                transaction.remove(this)
+                transaction.commit()
+
             } else {
                 shuffled = getRandomList(words[counter])
                 setWords(shuffled)
 
                 setDefinitions(counter)
+
                 listOfWordLayout.forEach {
                     it.background = resources.getDrawable(R.drawable.rounded_border_word)
                 }
@@ -159,6 +175,10 @@ class QuizPlayFragment : Fragment() {
             wordInfo[counter].definitions[0]
         view.findViewById<TextView>(R.id.word_number_textview).text =
             resources.getString(R.string.word_number, counter + 1, quiz.words.size)
+
+        if(wordInfo[counter].definitions.contains(getString(R.string.definition_not_found))){
+            view.findViewById<TextView>(R.id.word_definition_textview).text = getString(R.string.definition_not_found_with_word, words[counter])
+        }
     }
 
 
@@ -212,11 +232,16 @@ class QuizPlayFragment : Fragment() {
     }
 
     private fun initializeButtonsAfterStateRestored(idx: Int) {
+        if(wordInfo[counter].definitions.contains(getString(R.string.definition_not_found))){
+            answers[counter] = 1
+            return
+        }
+
         if (listOfWordTextView[idx].text != words[counter].word) {
             listOfWordLayout[idx].setBackgroundResource(R.drawable.rounded_border_word_red)
             listOfWordCheckMark[idx].setBackgroundResource(R.drawable.baseline_close_24)
             wordsTry[idx] = -1
-
+            answers[counter] = -1
         } else {
             listOfWordLayout[idx].setBackgroundResource(R.drawable.rounded_border_word_green)
             listOfWordCheckMark[idx].setBackgroundResource(R.drawable.baseline_done_24)
@@ -224,6 +249,11 @@ class QuizPlayFragment : Fragment() {
                 Prefs.getInstance(this.requireContext()).learned + 1
             lockOtherButton()
             wordsTry[idx] = 1
+            if (!wordsTry.contains(-1)) {
+                answers[counter] = 1
+            } else {
+                answers[counter] = 2
+            }
         }
     }
 

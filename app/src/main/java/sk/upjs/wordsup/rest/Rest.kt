@@ -19,7 +19,7 @@ private val RETROFIT = Retrofit.Builder()
 interface WordsRestDao {
 
     @GET("{word}")
-    suspend fun getDictionaryData(@Path("word") word: String) : List<DefinitionResponseModelItem>
+    suspend fun getDictionaryData(@Path("word") word: String): List<DefinitionResponseModelItem>
 
 }
 

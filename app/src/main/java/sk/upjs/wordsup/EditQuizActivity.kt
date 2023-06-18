@@ -64,7 +64,6 @@ class EditQuizActivity : AppCompatActivity() {
         adapter = savedInstanceState.getSerializable("adapter") as WordAdapter
     }
 
-
     override fun onResume() {
         super.onResume()
         listView = findViewById(R.id.word_recycler_view)
@@ -95,7 +94,7 @@ class EditQuizActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         }
 
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(1, ItemTouchHelper.LEFT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,

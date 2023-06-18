@@ -2,8 +2,6 @@ package sk.upjs.wordsup.dao.WordsByQuiz
 
 import Phonetic
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -25,21 +23,26 @@ class WordsDefinitionRepository @Inject constructor() {
         withContext(Dispatchers.Default) {
             val deferredResults = list.map { word ->
                 async {
-                    val definitions = mutableListOf<String>()
+                    var definitions = mutableListOf<String>()
                     var phonetic = Phonetic()
 
-                    val response = RestApi.wordsRestDao.getDictionaryData(word.word)
-                    response.forEach { responseModel ->
-                        responseModel.meanings?.forEach { meaning ->
-                            meaning.definitions?.forEach {
-                                definitions.add(it.definition.toString())
+                    try {
+                        val response = RestApi.wordsRestDao.getDictionaryData(word.word)
+                        response.forEach { responseModel ->
+                            responseModel.meanings?.forEach { meaning ->
+                                meaning.definitions?.forEach {
+                                    definitions.add(it.definition.toString())
+                                }
+                            }
+                            responseModel.phonetics?.forEach {
+                                if (it.audio?.contains("uk") == true) {
+                                    phonetic = it
+                                }
                             }
                         }
-                        responseModel.phonetics?.forEach {
-                            if (it.audio?.contains("uk") == true) {
-                                phonetic = it
-                            }
-                        }
+                    } catch (e: Exception) {
+                        definitions = mutableListOf("Sorry, we didn't find a definition for this word")
+                        phonetic = Phonetic("","")
                     }
                     WordInfo(definitions, phonetic)
                 }
