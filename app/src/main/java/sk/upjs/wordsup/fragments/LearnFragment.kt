@@ -5,49 +5,85 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.search.SearchBar
-import com.google.android.material.search.SearchView
-import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import sk.upjs.wordsup.R
-import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.dao.word.WordListAdapter
 import sk.upjs.wordsup.dao.word.WordViewModel
 
-
+@AndroidEntryPoint
 class LearnFragment : Fragment() {
 
-    private val viewModel: WordViewModel by activityViewModels()
+    private val viewModel: WordViewModel by viewModels()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var searchBar: SearchBar
-    private lateinit var filteredRecyclerView: RecyclerView
+
 
     private var adapter = WordListAdapter(R.drawable.rounded_border_word)
-    private var filteredAdapter = WordListAdapter(R.drawable.rounded_border_word_dark)
+
+    private var search = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
 
-        }
+        adapter = WordListAdapter(R.drawable.rounded_border_word)
     }
 
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString("search", search)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         recyclerView = requireView().findViewById(R.id.recycler_view_words)
-        filteredRecyclerView = requireView().findViewById(R.id.recycler_view_words_filtered)
-        searchView = requireView().findViewById(R.id.word_search_view)
-        searchBar = requireView().findViewById(R.id.search_bar)
+        searchView = requireView().findViewById(R.id.search_view)
+
+        recyclerView.adapter = adapter
+
+        viewModel.allWords.observe(viewLifecycleOwner) {
+            adapter.modifyList(it)
+            if (savedInstanceState != null) {
+                searchView.setQuery(savedInstanceState.getString("search"),true)
+                (recyclerView.adapter as WordListAdapter).filter(savedInstanceState.getString("search"))
+            }
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                (recyclerView.adapter as WordListAdapter).filter(newText)
+                search = newText
+                return false
+            }
+        })
+
+        searchView.setOnQueryTextFocusChangeListener { view, b ->
+            requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible =
+                !requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible
+        }
+        searchView.setOnClickListener { searchView.isIconified = false }
+//        searchView.setOnFocusChangeListener { view, b ->
+//            requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible =
+//                !requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible
+//        }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,51 +92,7 @@ class LearnFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_learn, container, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    override fun onStart() {
-        super.onStart()
-        setRecyclerView()
-
-
-        searchView.editText.setOnEditorActionListener { v, actionId, event ->
-            searchBar.text = searchView.text
-            (filteredRecyclerView.adapter as WordListAdapter).filter.filter(searchBar.text)
-            (recyclerView.adapter as WordListAdapter).filter.filter(searchBar.text)
-            adapter.notifyDataSetChanged()
-            filteredAdapter.notifyDataSetChanged()
-            false
-        }
-        searchView.editText.doOnTextChanged { text, start, before, count ->
-            searchBar.text = searchView.text
-            (filteredRecyclerView.adapter as WordListAdapter).filter.filter(searchView.text)
-            (recyclerView.adapter as WordListAdapter).filter.filter(searchView.text)
-            adapter.notifyDataSetChanged()
-            filteredAdapter.notifyDataSetChanged()
-        }
-        searchView.editText.setOnFocusChangeListener { view, b ->
-            requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible =
-                !requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible
-        }
-
-
-
-
-    }
-
-
-    private fun setRecyclerView() {
-
-        recyclerView.adapter = adapter
-        filteredRecyclerView.adapter = filteredAdapter
-
-        viewModel.allWords.observe(viewLifecycleOwner) {
-            adapter.submitList(it?.toMutableList())
-            filteredAdapter.submitList(it.toMutableList())
-        }
-    }
-
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String, param2: String) = LearnFragment().apply {
             arguments = Bundle().apply {

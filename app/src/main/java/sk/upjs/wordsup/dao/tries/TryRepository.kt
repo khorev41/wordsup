@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class TryRepository @Inject constructor(private val dao: TryDao) {
 
-    val tries = dao.getTries()
+    val tries = dao.getTriesWithQuiz()
 
     @WorkerThread
     suspend fun deleteTries(tries : List<Try>){

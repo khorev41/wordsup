@@ -14,10 +14,10 @@
         android:title="Learn" />
 
     <item
-        android:id="@+id/quiz"
+        android:id="@+id/history"
         android:enabled="true"
-        android:icon="@drawable/icon_selection_quiz"
-        android:title="Quiz" />
+        android:icon="@drawable/icon_selection_history"
+        android:title="History" />
 
     <item
         android:id="@+id/settings"

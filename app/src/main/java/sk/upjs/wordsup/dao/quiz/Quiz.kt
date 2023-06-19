@@ -2,6 +2,7 @@ package sk.upjs.wordsup.dao.quiz
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import sk.upjs.wordsup.dao.tries.Try
 import sk.upjs.wordsup.dao.word.Word
 import java.io.Serializable
 
@@ -50,22 +51,57 @@ interface QuizDao {
 
     @Query("SELECT * FROM words WHERE word = :w")
     suspend fun getWord(w: String): Word
+    @Delete
+    suspend fun deleteWord(word: Word)
 
     suspend fun insertQuizWithWords(quiz: QuizWithWords) {
-        var quizID = quiz.quiz.quizId
-        if (quiz.quiz.quizId == 0L) {
-            quizID = insertQuiz(quiz.quiz)
+        var quizID = insertQuiz(quiz.quiz)
+        if(quizID == -1L){
+            quizID = quiz.quiz.quizId
         }
         quiz.words.forEach {
             if (it.wordId == 0L) {
                 insertWord(it)
-                insertQuizWordCrossRef(QuizWordCrossRef(getWord(it.word).wordId,quizID))
-            }else{
-                insertQuizWordCrossRef(QuizWordCrossRef(it.wordId,quizID))
+                insertQuizWordCrossRef(QuizWordCrossRef(getWord(it.word).wordId, quizID))
+            } else {
+                var wordID = insertWord(it)
+                if(wordID == -1L){
+                    wordID = it.wordId
+                }
+                insertQuizWordCrossRef(QuizWordCrossRef(wordID, quizID))
             }
         }
     }
 
+    suspend fun deleteQuizWithWords(quiz: QuizWithWords) {
+        deleteTriesByQuizId(quiz.quiz.quizId)
+
+        quiz.words.forEach {
+            deleteQuizWordCrossRef(QuizWordCrossRef(it.wordId, quiz.quiz.quizId))
+        }
+        deleteQuiz(quiz.quiz)
+
+        deleteWordsIfPossible()
+
+    }
+
+    @Query("DELETE FROM words WHERE words.wordId NOT IN (SELECT q.wordId FROM QuizWordCrossRef q)")
+    suspend fun deleteWordsIfPossible()
+
+    @Query("DELETE FROM tries WHERE quizId = :quiz")
+    suspend fun deleteTriesByQuizId(quiz: Long)
+
+    @Query("SELECT * FROM tries WHERE quizId = :quiz")
+    suspend fun getTriesByQuizId(quiz: Long) : List<Try>
+
+    @Insert
+    suspend fun insertTries(tries: List<Try>)
+
+    @Delete
+    suspend fun deleteQuiz(quiz: Quiz)
+
+    @Delete
+    suspend fun deleteQuizWordCrossRef(quizWordCrossRef: QuizWordCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertQuizWordCrossRef(quizWordCrossRef: QuizWordCrossRef)

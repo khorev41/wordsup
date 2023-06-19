@@ -10,7 +10,7 @@ import sk.upjs.wordsup.EditQuizActivity
 import sk.upjs.wordsup.QuizActivity
 import sk.upjs.wordsup.databinding.QuizLayoutBinding
 
-class QuizAdapter() :
+class QuizAdapter :
     ListAdapter<QuizWithWords, QuizAdapter.QuizViewHolder>(DiffCallback) {
 
     class QuizViewHolder(val binding: QuizLayoutBinding) :
@@ -46,6 +46,18 @@ class QuizAdapter() :
 
     override fun onBindViewHolder(holder: QuizViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun addItem(item: QuizWithWords) {
+        val list = currentList.toMutableList()
+        list.add(item)
+        submitList(list)
+    }
+
+    fun deleteOn(position: Int) {
+        var list = currentList.toMutableList()
+        list.removeAt(position)
+        submitList(list)
     }
 
 

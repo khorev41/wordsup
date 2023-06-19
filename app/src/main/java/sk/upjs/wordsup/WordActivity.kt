@@ -32,11 +32,11 @@ class WordActivity : AppCompatActivity() {
         }
     }
 
-    fun openFragment(fragment: Fragment?) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container_to_change, fragment!!)
-        transaction.addToBackStack(null)
-        transaction.commit()
+    private fun openFragment(fragment: Fragment?) {
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, fragment!!)
+            transaction.addToBackStack(null)
+            transaction.commit()
     }
     fun closeFragment(fragment: Fragment?){
         val transaction = supportFragmentManager.beginTransaction()

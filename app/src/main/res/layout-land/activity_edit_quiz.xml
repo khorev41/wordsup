@@ -14,11 +14,21 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/quiz_edit"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/quiz_edit"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"/>
+
         <RelativeLayout
-            android:id="@+id/left_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50sp">
+            android:layout_marginTop="5sp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_text_layout"
@@ -117,7 +127,6 @@
             tools:listitem="@layout/word_item_layout"
             android:focusable="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-        />
 
     </RelativeLayout>
 

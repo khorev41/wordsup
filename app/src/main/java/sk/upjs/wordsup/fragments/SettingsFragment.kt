@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import sk.upjs.wordsup.R
 
-// TODO: Rename parameter arguments, choose names that match
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class SettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -33,8 +33,6 @@ class SettingsFragment : Fragment() {
     }
 
     companion object {
-
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             SettingsFragment().apply {

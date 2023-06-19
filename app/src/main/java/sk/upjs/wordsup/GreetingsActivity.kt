@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalUnitApi::class)
-
 package sk.upjs.wordsup
 
 import android.content.Intent

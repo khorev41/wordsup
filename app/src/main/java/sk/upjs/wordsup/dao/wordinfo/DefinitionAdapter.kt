@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sk.upjs.wordsup.databinding.WordLayoutBinding
 
-class DefinitionAdapter() :
+class DefinitionAdapter :
     ListAdapter<String, DefinitionAdapter.DefinitionViewHolder>(DiffCallback) {
 
     class DefinitionViewHolder(val binding: WordLayoutBinding) :

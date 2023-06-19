@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.databinding.WordItemLayoutBinding
 
-class WordAdapter() : ListAdapter<Word, WordAdapter.WordViewHolder>(DiffCallback), java.io.Serializable {
+class WordAdapter : ListAdapter<Word, WordAdapter.WordViewHolder>(DiffCallback), java.io.Serializable {
 
     private var itemList = mutableListOf<Word>()
     private var toDelete = mutableListOf<Word>()
@@ -31,8 +31,7 @@ class WordAdapter() : ListAdapter<Word, WordAdapter.WordViewHolder>(DiffCallback
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
-        return WordItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            .let { WordViewHolder(it) }
+        return WordViewHolder(WordItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {

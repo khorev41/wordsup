@@ -12,53 +12,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primary"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/search_view_rounded"
+            android:layout_margin="15sp"
+            android:hint="@string/enter_word_to_search"
+            android:imeOptions="flagNoExtractUi"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="@string/enter_word_to_search"
+            app:iconifiedByDefault="false"
+            >
+
+        </androidx.appcompat.widget.SearchView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_words"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/primary">
+            android:layout_marginHorizontal="20sp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:listitem="@layout/word_layout" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_words"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20sp"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                tools:listitem="@layout/word_layout" />
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/primary">
-
-                <com.google.android.material.search.SearchBar
-                    android:id="@+id/search_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_word_to_search" />
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <com.google.android.material.search.SearchView
-                android:id="@+id/word_search_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/enter_word_to_search"
-                app:layout_anchor="@id/search_bar">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_words_filtered"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20sp"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                    tools:listitem="@layout/word_layout" />
-            </com.google.android.material.search.SearchView>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
 

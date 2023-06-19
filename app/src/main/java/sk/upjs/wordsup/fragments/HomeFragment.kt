@@ -1,6 +1,6 @@
 package sk.upjs.wordsup.fragments
 
-import android.content.res.Configuration
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,16 +9,67 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
+import sk.upjs.wordsup.EditQuizActivity
 import sk.upjs.wordsup.Prefs
 import sk.upjs.wordsup.R
+import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizAdapter
 import sk.upjs.wordsup.dao.quiz.QuizViewModel
+import sk.upjs.wordsup.dao.quiz.QuizWithWords
 
 class HomeFragment : Fragment() {
     private val viewModel: QuizViewModel by activityViewModels()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var addButton: MaterialButton
+    val adapter = QuizAdapter()
+
+    //direction depending on orientation
+    private val itemTouchHelper by lazy {
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            1, if (resources.configuration.orientation == 1) {
+                ItemTouchHelper.LEFT
+            } else {
+                ItemTouchHelper.UP
+            }
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder,
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val deletedQuiz: QuizWithWords =
+                    adapter.currentList[viewHolder.adapterPosition] as QuizWithWords
+
+                val position = viewHolder.adapterPosition
+                adapter.deleteOn(position)
+
+                var snackbar = Snackbar.make(
+                    recyclerView, "Deleted " + deletedQuiz.quiz.name, Snackbar.LENGTH_LONG
+                ).setAction("Undo") {
+                    adapter.addItem(deletedQuiz)
+                }
+
+                snackbar.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        // Called when the Snackbar is dismissed
+                        if (event != DISMISS_EVENT_ACTION) {
+                            viewModel.deleteQuiz(deletedQuiz)
+                        }
+                    }
+                }).show()
+            }
+        }
+        ItemTouchHelper(callback)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,46 +80,31 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = requireView().findViewById(R.id.recycler_view_quiz)
+        recyclerView = view.findViewById(R.id.recycler_view_quiz)
+        addButton = view.findViewById(R.id.add_quiz_button)
     }
 
     override fun onStart() {
         super.onStart()
 
+
         setGreeting(requireView())
         setRecyclerView()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-    }
 
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-    }
 
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        val recyclerView = requireView().findViewById<RecyclerView>(R.id.recycler_view_quiz)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setRecyclerView()
-
-            recyclerView.layoutManager =
-                LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setRecyclerView()
-
-            recyclerView.layoutManager = LinearLayoutManager(this.context)
+        addButton.setOnClickListener {
+            val intent = Intent(it.context, EditQuizActivity::class.java)
+            intent.putExtra("quiz", QuizWithWords(Quiz(0, ""), listOf()))
+            it.context.startActivity(intent)
         }
     }
 
+
     private fun setRecyclerView() {
-        val adapter = QuizAdapter()
         recyclerView.adapter = adapter
 
         viewModel.allQuizzes.observe(viewLifecycleOwner) {

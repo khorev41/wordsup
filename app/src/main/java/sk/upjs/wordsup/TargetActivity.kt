@@ -90,7 +90,6 @@ class TargetActivity : ComponentActivity() {
 
 }
 
-@OptIn(ExperimentalUnitApi::class)
 @Composable
 private fun Text() {
     Text(

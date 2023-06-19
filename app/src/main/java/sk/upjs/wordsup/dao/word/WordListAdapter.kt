@@ -3,33 +3,21 @@ package sk.upjs.wordsup.dao.word
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import sk.upjs.wordsup.databinding.WordLayoutBinding
 import sk.upjs.wordsup.WordActivity
-import sk.upjs.wordsup.rest.RestApi
+import sk.upjs.wordsup.databinding.WordLayoutBinding
 import java.util.*
 
 class WordListAdapter(private val background: Int) :
-    ListAdapter<Word, WordListAdapter.WordViewHolder>(DiffCallback), Filterable {
+    ListAdapter<Word, WordListAdapter.WordViewHolder>(DiffCallback) {
 
-    var filteredList: MutableList<Word>? = null
-    var list: MutableList<Word>? = null
-
+    private var unfilteredlist = listOf<Word>()
 
     class WordViewHolder(private val binding: WordLayoutBinding, private val background: Int) :
         RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(
-            word: Word,
-        ) {
-
+        fun bind(word: Word) {
             binding.root.setOnClickListener {
                 val intent = Intent(it.context, WordActivity::class.java)
                 intent.putExtra("word", word)
@@ -44,55 +32,30 @@ class WordListAdapter(private val background: Int) :
 
     }
 
-    override fun getFilter(): Filter {
+    fun filter(query: CharSequence?) {
+        val list = mutableListOf<Word>()
 
-        return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): FilterResults {
-
-                val charString = charSequence.toString()
-
-                if (charString.isEmpty()) {
-
-                    filteredList = list
-                } else {
-                    list?.let {
-                        val filterList = arrayListOf<Word>()
-                        for (word in list!!) {
-
-                            if (charString.lowercase(Locale.ENGLISH) in word.word.lowercase(
-                                    Locale.ENGLISH
-                                )
-                            ) {
-                                filterList.add(word)
-                            }
-
-                        }
-
-                        filteredList = filterList
-                    }
-                }
-                val filterResults = FilterResults()
-                filterResults.values = filteredList
-                return filterResults
+        // perform the data filtering
+        if (!query.isNullOrEmpty()) {
+            unfilteredlist.let {
+                list.addAll(it.filter {
+                    it.word.lowercase(Locale.getDefault()).contains(
+                        query.toString().lowercase(Locale.getDefault())
+                    ) || it.word.lowercase(Locale.getDefault())
+                        .contains(query.toString().lowercase(Locale.getDefault()))
+                })
             }
-
-            override fun publishResults(
-                charSequence: CharSequence,
-                filterResults: FilterResults,
-            ) {
-                filteredList = filterResults.values as ArrayList<Word>
-                submitList(filteredList as ArrayList<Word>)
-            }
+        } else {
+            list.addAll(unfilteredlist)
         }
+
+        submitList(list)
     }
 
-    override fun submitList(items: MutableList<Word>?) {
-        super.submitList(items)
 
-        if (list == null) {
-            list = items
-        }
-
+    fun modifyList(list: List<Word>) {
+        unfilteredlist = list
+        submitList(list)
     }
 
 
@@ -117,4 +80,3 @@ class WordListAdapter(private val background: Int) :
 
     }
 }
-

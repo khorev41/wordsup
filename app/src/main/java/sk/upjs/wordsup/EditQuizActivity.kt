@@ -1,7 +1,9 @@
 package sk.upjs.wordsup
 
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
@@ -18,6 +20,7 @@ import sk.upjs.wordsup.dao.quiz.WordAdapter
 import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.dao.word.WordViewModel
 
+
 @AndroidEntryPoint
 class EditQuizActivity : AppCompatActivity() {
 
@@ -32,6 +35,8 @@ class EditQuizActivity : AppCompatActivity() {
     private lateinit var addButton: Button
     private lateinit var saveButton: Button
 
+    private var flag = true
+
 
     private lateinit var adapter: WordAdapter
     private val quizViewModel: QuizViewModel by viewModels()
@@ -42,7 +47,13 @@ class EditQuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_quiz)
 
+
         quiz = intent.getSerializableExtra("quiz") as QuizWithWords
+
+        if (quiz.quiz.quizId == 0L){
+            findViewById<TextView>(R.id.quiz_edit).text = getString(R.string.create_quiz)
+        }
+
         adapter = WordAdapter()
         adapter.submitList(quiz.words)
         adapter.getItemList().addAll(quiz.words)
@@ -54,11 +65,13 @@ class EditQuizActivity : AppCompatActivity() {
         outState.putString("name", name)
         outState.putSerializable("myquiz", quiz)
         outState.putSerializable("adapter", adapter)
+        outState.putBoolean("flag",flag)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
+        flag = savedInstanceState.getBoolean("flag")
         name = savedInstanceState.getString("name").toString()
         quiz = savedInstanceState.getSerializable("myquiz") as QuizWithWords
         adapter = savedInstanceState.getSerializable("adapter") as WordAdapter
@@ -80,6 +93,7 @@ class EditQuizActivity : AppCompatActivity() {
 
 
         addButton.setOnClickListener {
+            flag = false
             if (wordTextInput.text.isNullOrBlank()) {
                 wordLayout.error = "Field is empty"
             } else {
@@ -111,7 +125,7 @@ class EditQuizActivity : AppCompatActivity() {
                 adapter.getItemList().removeAt(viewHolder.adapterPosition)
                 adapter.submitList(adapter.getItemList())
                 adapter.notifyDataSetChanged()
-
+                flag = false
 
                 Snackbar.make(listView, "Deleted " + deletedWord.word, Snackbar.LENGTH_LONG)
                     .setAction(
@@ -129,9 +143,29 @@ class EditQuizActivity : AppCompatActivity() {
         wordTextInput.addTextChangedListener {
             wordLayout.error = null
         }
+        nameTextField.addTextChangedListener{
+                flag = false
+
+        }
+
+        wordTextInput.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addButton.performClick()
+                true
+            } else false
+        }
+
+        nameTextField.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addButton.performClick()
+                true
+            } else false
+        }
+
+
 
         saveButton.setOnClickListener {
-            if(adapter.getItemList().size > 3){
+            if (adapter.getItemList().size > 3) {
                 if (nameTextField.text.isNullOrBlank()) {
                     nameLayout.error = "Name is empty"
                 } else {
@@ -141,20 +175,25 @@ class EditQuizActivity : AppCompatActivity() {
                     quizViewModel.insertQuizWithWords(quiz)
                     finish()
                 }
-            }else{
+            } else {
                 wordLayout.error = "Quiz should have at least 4 words"
             }
         }
     }
 
     override fun onBackPressed() {
-        MaterialAlertDialogBuilder(this).setTitle(getString(R.string.are_you_sure))
-            .setMessage(getString(R.string.changes_will_not_be_saved))
-            .setNegativeButton(getString(R.string.no)) { dialog, which ->
-                // Respond to negative button press
-            }.setPositiveButton(getString(R.string.yes)) { dialog, which ->
-                finish()
-            }.show()
+        if(flag){
+            finish()
+        }else{
+            MaterialAlertDialogBuilder(this).setTitle(getString(R.string.are_you_sure))
+                .setMessage(getString(R.string.changes_will_not_be_saved))
+                .setNegativeButton(getString(R.string.no)) { dialog, which ->
+                    // Respond to negative button press
+                }.setPositiveButton(getString(R.string.yes)) { dialog, which ->
+                    finish()
+                }.show()
+        }
+
     }
 
 

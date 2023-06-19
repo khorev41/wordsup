@@ -7,7 +7,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
 import sk.upjs.wordsup.fragments.FinishQuizFragment
-import sk.upjs.wordsup.fragments.LearnFragment
 import sk.upjs.wordsup.fragments.QuizPlayFragment
 import sk.upjs.wordsup.fragments.StartQuizFragment
 
@@ -15,13 +14,22 @@ import sk.upjs.wordsup.fragments.StartQuizFragment
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var quiz: QuizWithWords
-    private var wasStartedQuiz = false;
+    private var wasStartedQuiz = false
 
     fun openFragment(fragment: Fragment?) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment!!)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        val tag = fragment?.javaClass?.simpleName
+        val existingFragment = supportFragmentManager.findFragmentByTag(tag)
+
+        if (existingFragment != null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, existingFragment, tag)
+                .commit()
+        } else {
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, fragment!!, tag)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

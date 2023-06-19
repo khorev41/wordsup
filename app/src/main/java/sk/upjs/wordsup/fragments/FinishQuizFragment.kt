@@ -63,9 +63,8 @@ class FinishQuizFragment : Fragment() {
         }
     }
 
-    //TODO save try to db
     fun saveTryToDB() {
-        val tries = Try(0, quiz.quiz.quizId, answers.count{it == 1}, java.util.Date())
+        val tries = Try(0, quiz.quiz.quizId, ((answers.count{it == 1}.div(answers.size.toDouble())).times(100)).toInt(), java.util.Date())
         viewModel.insert(listOf(tries))
     }
 

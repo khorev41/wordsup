@@ -3,11 +3,8 @@ package sk.upjs.wordsup.dao.wordinfo
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import sk.upjs.wordsup.dao.word.Word
-import sk.upjs.wordsup.dao.WordsByQuiz.WordsDefinitionRepository
 import javax.inject.Inject
 
 @HiltViewModel

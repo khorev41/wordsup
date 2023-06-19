@@ -21,12 +21,12 @@
         >
 
         <ImageView
-            android:id="@+id/word_delete_button"
             android:layout_width="25sp"
             android:layout_height="25sp"
             android:adjustViewBounds="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/baseline_delete_24" />
+            android:src="@drawable/baseline_delete_24"
+            android:contentDescription="TODO" />
     </RelativeLayout>
 
 

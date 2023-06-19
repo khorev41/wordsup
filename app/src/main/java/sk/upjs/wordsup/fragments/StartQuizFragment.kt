@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.button.MaterialButton
@@ -20,7 +19,7 @@ import sk.upjs.wordsup.dao.wordinfo.WordsDefinitionViewModel
 class StartQuizFragment : Fragment() {
     private lateinit var quiz: QuizWithWords
     private var wordInfo = mutableListOf<WordInfo>()
-    private var wasStartedQuiz = false;
+    private var wasStartedQuiz = false
 
     private val viewModel: WordsDefinitionViewModel by viewModels()
 
@@ -56,19 +55,20 @@ class StartQuizFragment : Fragment() {
             wordInfo = list
             requireView().findViewById<MaterialButton>(R.id.start_quiz).isEnabled = true
             requireView().findViewById<MaterialButton>(R.id.start_quiz).text =resources.getString(R.string.start_quiz)
-            requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE;
+            requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
         }
 
         if (wasStartedQuiz) {
-            requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE;
+            requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
         }
     }
 
     fun openFragment(fragment: Fragment?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment!!)
+        transaction.replace(R.id.fragment_container, fragment!!, tag)
         transaction.addToBackStack(null)
         transaction.commit()
+
     }
 
     companion object {

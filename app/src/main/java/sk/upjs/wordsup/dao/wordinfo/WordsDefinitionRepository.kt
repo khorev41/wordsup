@@ -1,4 +1,4 @@
-package sk.upjs.wordsup.dao.WordsByQuiz
+package sk.upjs.wordsup.dao.wordinfo
 
 import Phonetic
 import androidx.annotation.WorkerThread
@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import sk.upjs.wordsup.dao.word.Word
-import sk.upjs.wordsup.dao.wordinfo.WordInfo
 import sk.upjs.wordsup.rest.RestApi
 import javax.inject.Inject
 
