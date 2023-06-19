@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package sk.upjs.wordsup
 
 import android.os.Bundle
@@ -16,7 +18,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var quiz: QuizWithWords
     private var wasStartedQuiz = false
 
-    fun openFragment(fragment: Fragment?) {
+    private fun openFragment(fragment: Fragment?) {
         val tag = fragment?.javaClass?.simpleName
         val existingFragment = supportFragmentManager.findFragmentByTag(tag)
 
@@ -67,15 +69,14 @@ class QuizActivity : AppCompatActivity() {
             is QuizPlayFragment -> {
                 MaterialAlertDialogBuilder(this).setTitle(getString(R.string.are_you_sure))
                     .setMessage(getString(R.string.changes_will_not_be_saved))
-                    .setNegativeButton(getString(R.string.no)) { dialog, which ->
-                    }.setPositiveButton(getString(R.string.yes)) { dialog, which ->
+                    .setNegativeButton(getString(R.string.no)) { _, _ ->
+                    }.setPositiveButton(getString(R.string.yes)) { _, _ ->
                         finish()
                     }.show()
             }
             is FinishQuizFragment -> {
                 (supportFragmentManager.fragments.last() as FinishQuizFragment).saveTryToDB()
                 finish()
-                true
             }
             else -> {
                 finish()

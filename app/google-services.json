@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "919663901910",
+    "project_id": "wordsup-1c597",
+    "storage_bucket": "wordsup-1c597.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919663901910:android:3bd8990180e6dc22771d77",
+        "android_client_info": {
+          "package_name": "sk.upjs.wordsup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919663901910-fq12cajsvgp1244mr2snh4unqkjcchor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW5NFmMCZhHnURJ9kRW7VqiBcH5tzL1nY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "919663901910-fq12cajsvgp1244mr2snh4unqkjcchor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

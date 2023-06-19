@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import sk.upjs.wordsup.R
 import sk.upjs.wordsup.dao.word.WordListAdapter
@@ -24,7 +23,6 @@ class LearnFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-
 
     private var adapter = WordListAdapter(R.drawable.rounded_border_word)
 
@@ -41,6 +39,12 @@ class LearnFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        if (this::recyclerView.isInitialized) {
+            outState.putInt(
+                "position",
+                (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            )
+        }
         outState.putString("search", search)
     }
 
@@ -53,11 +57,18 @@ class LearnFragment : Fragment() {
 
         recyclerView.adapter = adapter
 
+        // TODO
+        if (savedInstanceState != null) {
+            val position = savedInstanceState.getInt("position")
+            recyclerView.scrollToPosition(position)
+        }
+
         viewModel.allWords.observe(viewLifecycleOwner) {
             adapter.modifyList(it)
+
             if (savedInstanceState != null) {
-                searchView.setQuery(savedInstanceState.getString("search"),true)
                 (recyclerView.adapter as WordListAdapter).filter(savedInstanceState.getString("search"))
+                searchView.setQuery(savedInstanceState.getString("search"), true)
             }
         }
 
@@ -73,15 +84,8 @@ class LearnFragment : Fragment() {
             }
         })
 
-        searchView.setOnQueryTextFocusChangeListener { view, b ->
-            requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible =
-                !requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible
-        }
         searchView.setOnClickListener { searchView.isIconified = false }
-//        searchView.setOnFocusChangeListener { view, b ->
-//            requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible =
-//                !requireActivity().requireViewById<BottomNavigationView>(R.id.bottom_navigation).isVisible
-//        }
+
     }
 
 

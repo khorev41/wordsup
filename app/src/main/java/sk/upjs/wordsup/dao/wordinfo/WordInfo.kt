@@ -1,7 +1,7 @@
 package sk.upjs.wordsup.dao.wordinfo
 
 
-import Phonetic
+import sk.upjs.wordsup.rest.Phonetic
 import java.io.Serializable
 
 data class WordInfo(

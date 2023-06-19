@@ -41,7 +41,8 @@
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:src="@drawable/prize"
-                        android:contentDescription="TODO" />
+                        android:contentDescription=""
+                        tools:ignore="ContentDescription" />
 
                 </androidx.cardview.widget.CardView>
 

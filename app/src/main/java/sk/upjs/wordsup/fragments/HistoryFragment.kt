@@ -65,7 +65,7 @@ class HistoryFragment : Fragment() {
             val sum = it.fold(0.0) { acc, tryItem ->
                 acc + tryItem.attempt.percentage.toDouble() / 100 * tryItem.words.size
             }
-            totallyWordAnswered.text = sum.toInt().toString()
+            totallyWordAnswered.text = "~ "+ sum.toInt().toString()
         }
 
 

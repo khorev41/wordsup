@@ -1,0 +1,33 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/general">
+
+        <EditTextPreference
+            app:key="name_string"
+            app:title="Name"
+            android:singleLine="true"
+            android:maxLines="1"
+             />
+
+        <EditTextPreference
+            app:key="target_string"
+            app:title="Target number"
+            android:inputType="numberDecimal"
+            android:singleLine="true"/>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/sync_header">
+
+
+    </PreferenceCategory>
+    <PreferenceCategory app:title="Advanced">
+        <Preference
+            android:key="delete_data"
+            android:title="Delete all data" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package sk.upjs.wordsup
 
 import android.os.Bundle
@@ -16,8 +18,8 @@ import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import sk.upjs.wordsup.dao.quiz.QuizViewModel
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
-import sk.upjs.wordsup.dao.quiz.WordAdapter
 import sk.upjs.wordsup.dao.word.Word
+import sk.upjs.wordsup.dao.word.WordAdapter
 import sk.upjs.wordsup.dao.word.WordViewModel
 
 
@@ -56,7 +58,6 @@ class EditQuizActivity : AppCompatActivity() {
 
         adapter = WordAdapter()
         adapter.submitList(quiz.words)
-        adapter.getItemList().addAll(quiz.words)
         name = quiz.quiz.name
     }
 
@@ -91,23 +92,6 @@ class EditQuizActivity : AppCompatActivity() {
         listView.adapter = adapter
         nameTextField.setText(name)
 
-
-        addButton.setOnClickListener {
-            flag = false
-            if (wordTextInput.text.isNullOrBlank()) {
-                wordLayout.error = "Field is empty"
-            } else {
-                if (adapter.getItemList().contains(Word(0, wordTextInput.text.toString()))) {
-                    wordLayout.error = "Word is already in quiz"
-                } else {
-                    adapter.getItemList().add(0, Word(0, wordTextInput.text.toString()))
-                    adapter.submitList(adapter.getItemList())
-                    wordTextInput.setText("")
-                }
-            }
-            adapter.notifyDataSetChanged()
-        }
-
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(1, ItemTouchHelper.LEFT) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -118,61 +102,87 @@ class EditQuizActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val deletedWord: Word = adapter.currentList[viewHolder.adapterPosition] as Word
+                val deletedWord: Word = adapter.currentList[viewHolder.adapterPosition]
 
                 val position = viewHolder.adapterPosition
-                adapter.getToDelete().add(deletedWord)
-                adapter.getItemList().removeAt(viewHolder.adapterPosition)
-                adapter.submitList(adapter.getItemList())
-                adapter.notifyDataSetChanged()
+                adapter.deleteItem(position)
+                wordViewModel.deleteWordFromQuiz(quiz.quiz, deletedWord)
                 flag = false
 
                 Snackbar.make(listView, "Deleted " + deletedWord.word, Snackbar.LENGTH_LONG)
                     .setAction(
                         "Undo"
                     ) {
-                        adapter.getItemList().add(position, deletedWord)
-                        adapter.submitList(adapter.getItemList())
-                        adapter.getToDelete().remove(deletedWord)
-                        adapter.notifyDataSetChanged()
+                        quizViewModel.insertQuizAndWord(quiz.quiz, deletedWord)
+                        adapter.addItemAt(position, deletedWord)
                     }.show()
             }
 
         }).attachToRecyclerView(listView)
 
+        addButton.setOnClickListener {
+            flag = false
+            if (wordTextInput.text.isNullOrBlank()) {
+                wordLayout.error = "Field is empty"
+            } else {
+                var word = Word(
+                    0,
+                    wordTextInput.text.toString().replace(Regex("\\s+"), " ").trim().toLowerCase()
+                        .capitalize()
+                )
+                if (adapter.currentList.contains(word)) {
+                    wordLayout.error = "Word is already in quiz"
+                } else {
+                    adapter.addItemAt(0, word)
+                    quiz.quiz.name =
+                        nameTextField.text.toString().replace(Regex("\\s+"), " ").trim()
+                            .toLowerCase().capitalize()
+
+                    // priebezne ukladanie lepsie ako vsetky nakoniec
+                    quizViewModel.insertQuizAndWord(quiz.quiz, word)
+                    quizViewModel.quizSavedId.observe(this) {
+                        quiz.quiz.quizId = it
+                    }
+                    wordTextInput.setText("")
+                }
+            }
+
+            //https://stackoverflow.com/questions/36426129/recyclerview-scroll-to-position-not-working-every-time
+            listView.post {
+                listView.smoothScrollToPosition(0)
+            }
+        }
+
+
         wordTextInput.addTextChangedListener {
             wordLayout.error = null
         }
-        nameTextField.addTextChangedListener{
-                flag = false
+        nameTextField.addTextChangedListener {
+            flag = false
 
         }
 
-        wordTextInput.setOnEditorActionListener { textView, actionId, keyEvent ->
+        wordTextInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // TODO
                 addButton.performClick()
                 true
             } else false
         }
 
-        nameTextField.setOnEditorActionListener { textView, actionId, keyEvent ->
+        nameTextField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 addButton.performClick()
                 true
             } else false
         }
-
-
 
         saveButton.setOnClickListener {
-            if (adapter.getItemList().size > 3) {
+            if (adapter.currentList.size > 3) {
                 if (nameTextField.text.isNullOrBlank()) {
                     nameLayout.error = "Name is empty"
                 } else {
-                    quiz.words = adapter.getItemList()
-                    quiz.quiz.name = nameTextField.text.toString()
-                    wordViewModel.deleteWordsFromQuiz(quiz, adapter.getToDelete())
-                    quizViewModel.insertQuizWithWords(quiz)
+                    quiz.words = adapter.currentList.toMutableList()
                     finish()
                 }
             } else {
@@ -181,15 +191,16 @@ class EditQuizActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onBackPressed() {
         if(flag){
             finish()
         }else{
             MaterialAlertDialogBuilder(this).setTitle(getString(R.string.are_you_sure))
                 .setMessage(getString(R.string.changes_will_not_be_saved))
-                .setNegativeButton(getString(R.string.no)) { dialog, which ->
+                .setNegativeButton(getString(R.string.no)) { _, _ ->
                     // Respond to negative button press
-                }.setPositiveButton(getString(R.string.yes)) { dialog, which ->
+                }.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     finish()
                 }.show()
         }

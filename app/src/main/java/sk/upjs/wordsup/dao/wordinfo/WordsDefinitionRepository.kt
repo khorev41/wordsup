@@ -1,6 +1,6 @@
 package sk.upjs.wordsup.dao.wordinfo
 
-import Phonetic
+import sk.upjs.wordsup.rest.Phonetic
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

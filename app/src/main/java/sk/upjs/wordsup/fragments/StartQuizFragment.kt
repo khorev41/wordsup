@@ -53,8 +53,9 @@ class StartQuizFragment : Fragment() {
         viewModel.getWordsInfos(quiz.words)
         viewModel.wordsInfos.observe(this) { list ->
             wordInfo = list
-            requireView().findViewById<MaterialButton>(R.id.start_quiz).isEnabled = true
-            requireView().findViewById<MaterialButton>(R.id.start_quiz).text =resources.getString(R.string.start_quiz)
+            val button = requireView().findViewById<MaterialButton>(R.id.start_quiz)
+            button.isEnabled = true
+            button.text = resources.getString(R.string.start_quiz)
             requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
         }
 

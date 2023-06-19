@@ -6,15 +6,15 @@ import sk.upjs.wordsup.dao.tries.Try
 import sk.upjs.wordsup.dao.word.Word
 import java.io.Serializable
 
-@Entity(tableName = "quizzes")
+@Entity(tableName = "quizzes", indices = [Index(value = ["quizId"])])
 data class Quiz(
     @PrimaryKey(autoGenerate = true)
-    val quizId: Long,
+    var quizId: Long,
     var name: String,
 ) : Serializable
 
 @Entity(
-    primaryKeys = ["quizId", "wordId"]
+    primaryKeys = ["quizId", "wordId"], indices = [Index(value = ["wordId"])]
 )
 data class QuizWordCrossRef(
     val wordId: Long,
@@ -47,30 +47,35 @@ interface QuizDao {
     suspend fun insertQuiz(quiz: Quiz): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertWord(words: Word): Long
+    suspend fun insertWord(word: Word): Long
+
 
     @Query("SELECT * FROM words WHERE word = :w")
     suspend fun getWord(w: String): Word
+
     @Delete
     suspend fun deleteWord(word: Word)
 
-    suspend fun insertQuizWithWords(quiz: QuizWithWords) {
-        var quizID = insertQuiz(quiz.quiz)
-        if(quizID == -1L){
-            quizID = quiz.quiz.quizId
+    suspend fun clearDatabase() {
+        deleteAllTries()
+        deleteAllWords()
+        deleteAllQuizzes()
+        deleteAllQuizWordCrossRef()
+    }
+
+    suspend fun insertQuizAndWord(quiz: Quiz, word: Word) : Long {
+        var quizID = insertQuiz(quiz)
+        if (quizID == -1L) {
+            quizID = quiz.quizId
         }
-        quiz.words.forEach {
-            if (it.wordId == 0L) {
-                insertWord(it)
-                insertQuizWordCrossRef(QuizWordCrossRef(getWord(it.word).wordId, quizID))
-            } else {
-                var wordID = insertWord(it)
-                if(wordID == -1L){
-                    wordID = it.wordId
-                }
-                insertQuizWordCrossRef(QuizWordCrossRef(wordID, quizID))
-            }
+        val id = insertWord(word)
+        if (id <= 0L) {
+            insertQuizWordCrossRef(QuizWordCrossRef(getWord(word.word).wordId, quizID))
+        } else {
+            insertQuizWordCrossRef(QuizWordCrossRef(id, quizID))
         }
+        return quizID
+
     }
 
     suspend fun deleteQuizWithWords(quiz: QuizWithWords) {
@@ -80,7 +85,6 @@ interface QuizDao {
             deleteQuizWordCrossRef(QuizWordCrossRef(it.wordId, quiz.quiz.quizId))
         }
         deleteQuiz(quiz.quiz)
-
         deleteWordsIfPossible()
 
     }
@@ -103,11 +107,20 @@ interface QuizDao {
     @Delete
     suspend fun deleteQuizWordCrossRef(quizWordCrossRef: QuizWordCrossRef)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertQuizWordCrossRef(quizWordCrossRef: QuizWordCrossRef)
 
     @Query("DELETE FROM quizzes")
-    suspend fun deleteAll()
+    suspend fun deleteAllQuizzes()
+
+    @Query("DELETE FROM tries")
+    suspend fun deleteAllTries()
+
+    @Query("DELETE FROM words")
+    suspend fun deleteAllWords()
+
+    @Query("DELETE FROM QuizWordCrossRef")
+    suspend fun deleteAllQuizWordCrossRef()
 
 
 }

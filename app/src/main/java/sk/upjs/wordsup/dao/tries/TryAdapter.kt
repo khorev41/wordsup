@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sk.upjs.wordsup.databinding.TryLayoutBinding
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TryWithQuizAdapter :
@@ -26,7 +25,7 @@ class TryWithQuizAdapter :
 
             binding.quizName.text = tries.quiz.name
             binding.percentageCorrect.text = "${tries.attempt.percentage}%"
-            binding.datetime.text =  SimpleDateFormat("yyyy-MM-dd HH:mm").format(tries.attempt.time)
+            binding.datetime.text =  SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(tries.attempt.time)
         }
 
     }

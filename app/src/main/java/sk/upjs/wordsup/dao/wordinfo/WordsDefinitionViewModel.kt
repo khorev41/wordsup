@@ -20,17 +20,6 @@ class WordsDefinitionViewModel @Inject constructor(private val repository: Words
         }
     }
 
-    class WordsByQuizViewModelFactory(private val repository: WordsDefinitionRepository) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(WordsDefinitionViewModel::class.java)) {
-                return WordsDefinitionViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-
-    }
-
-
 
 }
 

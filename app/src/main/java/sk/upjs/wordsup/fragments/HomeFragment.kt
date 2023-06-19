@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
@@ -78,23 +79,44 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (this::recyclerView.isInitialized) {
+            outState.putInt(
+                "position",
+                (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            )
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.recycler_view_quiz)
         addButton = view.findViewById(R.id.add_quiz_button)
+
+        setGreeting(requireView())
+
+        recyclerView.adapter = adapter
+
+        if (savedInstanceState != null) {
+            val position = savedInstanceState.getInt("position")
+            recyclerView.scrollToPosition(position)
+        }
+
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+
+
+        viewModel.allQuizzes.observe(viewLifecycleOwner) {
+            adapter.submitList(it?.toMutableList())
+        }
+
     }
+
 
     override fun onStart() {
         super.onStart()
 
-
-        setGreeting(requireView())
-        setRecyclerView()
-
-
-
-
-        itemTouchHelper.attachToRecyclerView(recyclerView)
 
         addButton.setOnClickListener {
             val intent = Intent(it.context, EditQuizActivity::class.java)
@@ -104,13 +126,6 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun setRecyclerView() {
-        recyclerView.adapter = adapter
-
-        viewModel.allQuizzes.observe(viewLifecycleOwner) {
-            adapter.submitList(it?.toMutableList())
-        }
-    }
 
     private fun setGreeting(view: View) {
 
@@ -120,7 +135,7 @@ class HomeFragment : Fragment() {
 
         val target = Prefs.getInstance(requireContext()).target
         val done = Prefs.getInstance(requireContext()).learned
-        val percent = ((done.toDouble() / target) * 100).toInt()
+        val percent = ((done.toDouble() / target.toInt()) * 100).toInt()
         view.findViewById<TextView>(R.id.progressTextView).text =
             resources.getString(R.string.progress_text, percent)
         view.findViewById<ProgressBar>(R.id.progress_circular).progress = percent

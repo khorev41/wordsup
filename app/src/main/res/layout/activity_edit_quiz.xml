@@ -55,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
+                android:singleLine="true"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +82,8 @@
                     android:id="@+id/word_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"/>
+                    app:errorEnabled="true"
+                    android:singleLine="true"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

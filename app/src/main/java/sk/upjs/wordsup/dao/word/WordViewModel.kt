@@ -5,6 +5,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
 import javax.inject.Inject
 
@@ -13,10 +14,9 @@ class WordViewModel @Inject constructor(private val repository: WordRepository) 
 
     val allWords = repository.words.asLiveData()
 
-    fun deleteWordsFromQuiz(quiz: QuizWithWords, words: List<Word>){
-        val wordsIds = words.map { it.wordId }
+    fun deleteWordFromQuiz(quiz: Quiz, word: Word){
         viewModelScope.launch {
-            repository.deleteQuizWordCrossRef(quiz.quiz.quizId, wordsIds)
+            repository.deleteQuizWordCrossRef(quiz.quizId, word.wordId)
         }
     }
 

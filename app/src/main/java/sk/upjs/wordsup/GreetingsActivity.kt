@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,7 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import sk.upjs.wordsup.ui.theme.WordsUpTheme
 
 class GreetingsActivity : ComponentActivity() {
@@ -55,37 +58,53 @@ class GreetingsActivity : ComponentActivity() {
             Surface(
                 modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
             ) {
-                Column {
-                    Text()
-                    TextField()
-                    NextButton()
+                Box(
+                    contentAlignment = Alignment.Center, // you apply alignment to all children
+                    modifier = Modifier.fillMaxSize()
+                ) {
+
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+
+                        Text()
+                        TextField()
+
+                    }
+
+                    Box(
+                        modifier = Modifier.align(Alignment.BottomEnd)
+                    ) {
+                        Button()
+                    }
+
                 }
+
             }
         }
     }
 
     @Composable
-    private fun NextButton() {
+    private fun Button() {
         val mContext = LocalContext.current
-        Box(
-            contentAlignment = Alignment.BottomEnd, modifier = Modifier.fillMaxSize()
-        ) {
-            Button(
-                onClick = {
-                    mContext.startActivity(
-                        Intent(
-                            mContext, TargetActivity::class.java
-                        )
+        Button(
+            onClick = {
+                mContext.startActivity(
+                    Intent(
+                        mContext, TargetActivity::class.java
                     )
-                    // save name to shared preferences
-                    Prefs.getInstance(mContext).name = nameGlobal
-                }, modifier = Modifier.padding(16.dp)
-            ) {
-                Text("Next")
-            }
+                )
+                // save name to shared preferences
+                Prefs.getInstance(mContext).name = nameGlobal.replace(Regex("\\s+"), " ").trim()
+            },
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text("Next")
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun TextField() {
         var name by remember { mutableStateOf("") }
@@ -94,12 +113,19 @@ class GreetingsActivity : ComponentActivity() {
             onValueChange = { name = it; nameGlobal = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(25.dp, 20.dp)
-                .background(color = Color.White),
+                .padding(40.dp, 20.dp)
+                .background(color = Color.Transparent),
             textStyle = TextStyle(
                 fontSize = 35.sp
             ),
-            singleLine = true
+            shape = RoundedCornerShape(12.dp),
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+            )
         )
     }
 
@@ -108,9 +134,6 @@ class GreetingsActivity : ComponentActivity() {
         Text(
             text = "Enter your name:",
             fontSize = 35.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 250.dp, 0.dp, 0.dp),
             textAlign = TextAlign.Center
         )
     }

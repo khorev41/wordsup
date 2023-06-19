@@ -9,13 +9,12 @@ class WordRepository @Inject constructor(private val dao: WordsDao) {
     val words = dao.getWords()
 
     @WorkerThread
-    suspend fun deleteQuizWordCrossRef(quizId: Long, words: List<Long>){
+    suspend fun deleteQuizWordCrossRef(quizId: Long, word: Long) {
         try {
-            dao.deleteQuizWordCrossRef(quizId, words)
-            words.forEach {
-                if (dao.getQuizWordCrossRefByWordId(it).isNullOrEmpty()) {
-                    dao.deleteWordById(it)
-                }
+            dao.deleteQuizWordCrossRef(quizId, word)
+
+            if (dao.getQuizWordCrossRefByWordId(word).isEmpty()) {
+                dao.deleteWordById(word)
             }
 
         } catch (e: Exception) {

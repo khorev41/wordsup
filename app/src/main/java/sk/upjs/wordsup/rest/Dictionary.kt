@@ -1,3 +1,4 @@
+package sk.upjs.wordsup.rest
 //https://github.com/MelnikovAleksandr/DictionaryApp/tree/main/app/src/main/java/ru/asmelnikov/dictionaryapp/data/dto
 data class Phonetic(
     val audio: String? = null,

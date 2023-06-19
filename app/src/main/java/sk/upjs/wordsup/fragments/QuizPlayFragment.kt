@@ -245,8 +245,12 @@ class QuizPlayFragment : Fragment() {
         } else {
             listOfWordLayout[idx].setBackgroundResource(R.drawable.rounded_border_word_green)
             listOfWordCheckMark[idx].setBackgroundResource(R.drawable.baseline_done_24)
+            // logic
+
             Prefs.getInstance(this.requireContext()).learned =
                 Prefs.getInstance(this.requireContext()).learned + 1
+
+
             lockOtherButton()
             wordsTry[idx] = 1
             if (!wordsTry.contains(-1)) {

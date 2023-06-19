@@ -52,8 +52,8 @@ interface WordsDao {
     @Delete
     suspend fun deleteQuizWordCrossRefs(quizWordCrossRefs: List<QuizWordCrossRef>)
 
-    @Query("DELETE FROM QuizWordCrossRef WHERE quizId = :quizId AND wordId IN (:words)")
-    suspend fun deleteQuizWordCrossRef(quizId: Long, words: List<Long>)
+    @Query("DELETE FROM QuizWordCrossRef WHERE quizId = :quizId AND wordId = :word")
+    suspend fun deleteQuizWordCrossRef(quizId: Long, word: Long)
 
 }
 

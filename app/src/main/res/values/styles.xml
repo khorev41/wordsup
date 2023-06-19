@@ -1,3 +1,5 @@
 <resources>
-
+    <style name="PreferencesTheme">
+        <item name="android:background">@color/primary</item>
+    </style>
 </resources>

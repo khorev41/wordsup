@@ -8,10 +8,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.button.MaterialButton
+import sk.upjs.wordsup.Prefs
 import sk.upjs.wordsup.R
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
 import sk.upjs.wordsup.dao.tries.Try
 import sk.upjs.wordsup.dao.tries.TryViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FinishQuizFragment : Fragment() {
     private lateinit var answers: MutableList<Int>
@@ -61,6 +64,9 @@ class FinishQuizFragment : Fragment() {
             saveTryToDB()
             requireActivity().finish()
         }
+
+        Prefs.getInstance(this.requireContext()).date =
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     }
 
     fun saveTryToDB() {

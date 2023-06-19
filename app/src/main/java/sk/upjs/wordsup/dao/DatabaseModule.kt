@@ -9,6 +9,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import sk.upjs.wordsup.dao.quiz.QuizDao
 import sk.upjs.wordsup.dao.tries.TryDao
 import sk.upjs.wordsup.dao.word.WordsDao
@@ -45,5 +48,6 @@ class DatabaseModule {
             "words_database"
         ).createFromAsset("database/words_database.db").fallbackToDestructiveMigration().build()
     }
+
 }
 

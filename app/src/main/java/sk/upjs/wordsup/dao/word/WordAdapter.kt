@@ -1,41 +1,45 @@
-package sk.upjs.wordsup.dao.quiz
+package sk.upjs.wordsup.dao.word
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.databinding.WordItemLayoutBinding
 
 class WordAdapter : ListAdapter<Word, WordAdapter.WordViewHolder>(DiffCallback), java.io.Serializable {
-
-    private var itemList = mutableListOf<Word>()
-    private var toDelete = mutableListOf<Word>()
-
-    fun getItemList(): MutableList<Word>{
-        return itemList
-    }
-    fun getToDelete(): MutableList<Word> {
-        return toDelete
-    }
 
     class WordViewHolder(val binding: WordItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(word: Word) {
             binding.wordString.text = word.word
-
         }
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
-        return WordViewHolder(WordItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return WordViewHolder(
+            WordItemLayoutBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun addItemAt(position: Int,item: Word) {
+        val list = currentList.toMutableList()
+        list.add(position,item)
+        submitList(list)
+    }
+
+    fun deleteItem(position: Int) {
+        val list = currentList.toMutableList()
+        list.removeAt(position)
+        submitList(list)
     }
 
 

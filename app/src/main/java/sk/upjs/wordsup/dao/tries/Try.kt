@@ -7,7 +7,7 @@ import sk.upjs.wordsup.dao.quiz.QuizWordCrossRef
 import sk.upjs.wordsup.dao.word.Word
 import java.util.*
 
-@Entity(tableName = "tries")
+@Entity(tableName = "tries",indices = [Index(value = ["quizId"])])
 data class Try(
     @PrimaryKey(autoGenerate = true) val tryId: Long,
     val quizId: Long,
