@@ -57,18 +57,16 @@ class LearnFragment : Fragment() {
 
         recyclerView.adapter = adapter
 
-        // TODO
-        if (savedInstanceState != null) {
-            val position = savedInstanceState.getInt("position")
-            recyclerView.scrollToPosition(position)
-        }
-
         viewModel.allWords.observe(viewLifecycleOwner) {
             adapter.modifyList(it)
 
             if (savedInstanceState != null) {
                 (recyclerView.adapter as WordListAdapter).filter(savedInstanceState.getString("search"))
                 searchView.setQuery(savedInstanceState.getString("search"), true)
+
+                val position = savedInstanceState.getInt("position")
+                recyclerView.smoothScrollToPosition(if (adapter.currentList.size > position + 3) position+3 else position )
+
             }
         }
 
@@ -98,7 +96,7 @@ class LearnFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) = LearnFragment().apply {
+        fun newInstance() = LearnFragment().apply {
             arguments = Bundle().apply {
 
             }

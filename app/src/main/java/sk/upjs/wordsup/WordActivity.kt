@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package sk.upjs.wordsup
 
 import android.os.Bundle
@@ -22,7 +24,7 @@ class WordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word)
-        var loadingFragment = LoadingFragment.newInstance()
+        val loadingFragment = LoadingFragment.newInstance()
         openFragment(loadingFragment)
         word = intent.getSerializableExtra("word") as Word
         viewModel.getWordsInfos(listOf(word))
@@ -38,7 +40,7 @@ class WordActivity : AppCompatActivity() {
             transaction.addToBackStack(null)
             transaction.commit()
     }
-    fun closeFragment(fragment: Fragment?){
+    private fun closeFragment(fragment: Fragment?){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.remove(fragment!!).commit()
     }

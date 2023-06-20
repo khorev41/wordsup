@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package sk.upjs.wordsup.fragments
 
 import android.os.Bundle
@@ -42,8 +44,7 @@ class StartQuizFragment : Fragment() {
         super.onResume()
 
         requireView().findViewById<TextView>(R.id.quiz_name).text = quiz.quiz.name
-        requireView().findViewById<TextView>(R.id.words_number).text =
-            quiz.words.size.toString() + " WORDS"
+        requireView().findViewById<TextView>(R.id.words_number).text =resources.getString(R.string.number_words,quiz.words.size)
 
         requireView().findViewById<MaterialButton>(R.id.start_quiz).setOnClickListener {
             openFragment(QuizPlayFragment.newInstance(wordInfo, quiz))
@@ -54,9 +55,15 @@ class StartQuizFragment : Fragment() {
         viewModel.wordsInfos.observe(this) { list ->
             wordInfo = list
             val button = requireView().findViewById<MaterialButton>(R.id.start_quiz)
-            button.isEnabled = true
-            button.text = resources.getString(R.string.start_quiz)
-            requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
+            if(quiz.words.size > 3){
+                button.isEnabled = true
+                button.text = resources.getString(R.string.start_quiz)
+                requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
+            }else{
+                requireView().findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
+                button.text = getString(R.string.quiz_have_less_4)
+            }
+
         }
 
         if (wasStartedQuiz) {
@@ -64,7 +71,7 @@ class StartQuizFragment : Fragment() {
         }
     }
 
-    fun openFragment(fragment: Fragment?) {
+    private fun openFragment(fragment: Fragment?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment!!, tag)
         transaction.addToBackStack(null)

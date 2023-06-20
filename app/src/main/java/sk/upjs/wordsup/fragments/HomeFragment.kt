@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import sk.upjs.wordsup.EditQuizActivity
-import sk.upjs.wordsup.Prefs
 import sk.upjs.wordsup.R
 import sk.upjs.wordsup.dao.quiz.Quiz
 import sk.upjs.wordsup.dao.quiz.QuizAdapter
 import sk.upjs.wordsup.dao.quiz.QuizViewModel
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
+import sk.upjs.wordsup.prefs.Prefs
 
 class HomeFragment : Fragment() {
     private val viewModel: QuizViewModel by activityViewModels()
@@ -51,21 +51,14 @@ class HomeFragment : Fragment() {
 
                 val position = viewHolder.adapterPosition
                 adapter.deleteOn(position)
+                viewModel.deleteQuiz(deletedQuiz)
 
-                var snackbar = Snackbar.make(
+                Snackbar.make(
                     recyclerView, "Deleted " + deletedQuiz.quiz.name, Snackbar.LENGTH_LONG
                 ).setAction("Undo") {
                     adapter.addItem(deletedQuiz)
-                }
-
-                snackbar.addCallback(object : Snackbar.Callback() {
-                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                        // Called when the Snackbar is dismissed
-                        if (event != DISMISS_EVENT_ACTION) {
-                            viewModel.deleteQuiz(deletedQuiz)
-                        }
-                    }
-                }).show()
+                    viewModel.insertQuizWithWord(deletedQuiz)
+                }.show()
             }
         }
         ItemTouchHelper(callback)
@@ -105,8 +98,6 @@ class HomeFragment : Fragment() {
 
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
-
-
         viewModel.allQuizzes.observe(viewLifecycleOwner) {
             adapter.submitList(it?.toMutableList())
         }
@@ -116,7 +107,6 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
 
         addButton.setOnClickListener {
             val intent = Intent(it.context, EditQuizActivity::class.java)
@@ -135,7 +125,7 @@ class HomeFragment : Fragment() {
 
         val target = Prefs.getInstance(requireContext()).target
         val done = Prefs.getInstance(requireContext()).learned
-        val percent = ((done.toDouble() / target.toInt()) * 100).toInt()
+        val percent = ((done.toDouble() / target) * 100).toInt()
         view.findViewById<TextView>(R.id.progressTextView).text =
             resources.getString(R.string.progress_text, percent)
         view.findViewById<ProgressBar>(R.id.progress_circular).progress = percent

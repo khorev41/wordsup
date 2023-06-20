@@ -1,5 +1,6 @@
 package sk.upjs.wordsup.dao.quiz
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,9 +14,10 @@ import sk.upjs.wordsup.databinding.QuizLayoutBinding
 class QuizAdapter :
     ListAdapter<QuizWithWords, QuizAdapter.QuizViewHolder>(DiffCallback) {
 
-    class QuizViewHolder(val binding: QuizLayoutBinding) :
+    class QuizViewHolder(private val binding: QuizLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(
             quiz: QuizWithWords,
         ) {
@@ -32,9 +34,8 @@ class QuizAdapter :
             }
 
             binding.quizName.text = quiz.quiz.name
-            binding.quizNumber.text = "Number of words: " + quiz.words.size.toString()
+            binding.quizNumber.text = "Number of words: ${quiz.words.size}"
         }
-
     }
 
 
@@ -55,7 +56,7 @@ class QuizAdapter :
     }
 
     fun deleteOn(position: Int) {
-        var list = currentList.toMutableList()
+        val list = currentList.toMutableList()
         list.removeAt(position)
         submitList(list)
     }

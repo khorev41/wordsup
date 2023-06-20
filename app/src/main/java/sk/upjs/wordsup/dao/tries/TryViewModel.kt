@@ -12,7 +12,6 @@ class TryViewModel @Inject constructor(private val repository: TryRepository) : 
 
     val allTries = repository.tries.asLiveData()
 
-
     fun insert(tries : List<Try>){
         viewModelScope.launch {
             repository.insert(tries)

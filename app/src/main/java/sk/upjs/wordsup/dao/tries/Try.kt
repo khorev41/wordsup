@@ -35,7 +35,7 @@ data class TryWithQuiz(
 interface TryDao {
 
     @Transaction
-    @Query("SELECT * FROM tries")
+    @Query("SELECT * FROM tries ORDER BY time DESC")
     fun getTriesWithQuiz(): Flow<List<TryWithQuiz>>
 
     @Query("SELECT * FROM tries")

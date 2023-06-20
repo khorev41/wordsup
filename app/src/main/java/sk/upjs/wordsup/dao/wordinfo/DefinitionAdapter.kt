@@ -11,7 +11,7 @@ import sk.upjs.wordsup.databinding.WordLayoutBinding
 class DefinitionAdapter :
     ListAdapter<String, DefinitionAdapter.DefinitionViewHolder>(DiffCallback) {
 
-    class DefinitionViewHolder(val binding: WordLayoutBinding) :
+    class DefinitionViewHolder(private val binding: WordLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(

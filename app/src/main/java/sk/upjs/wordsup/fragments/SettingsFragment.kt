@@ -2,6 +2,7 @@ package sk.upjs.wordsup.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.preference.EditTextPreference
@@ -11,9 +12,10 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import sk.upjs.wordsup.GreetingsActivity
-import sk.upjs.wordsup.Prefs
+import sk.upjs.wordsup.prefs.Prefs
 import sk.upjs.wordsup.R
-import sk.upjs.wordsup.dao.quiz.PrefsViewModel
+import sk.upjs.wordsup.prefs.PrefsViewModel
+import java.util.*
 
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -22,7 +24,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //https://stackoverflow.com/questions/12711418/change-preference-screen-background-color
-        requireView().setBackgroundColor(resources.getColor(R.color.primary, resources.newTheme()));
+        requireView().setBackgroundColor(resources.getColor(R.color.primary, resources.newTheme()))
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -31,25 +33,31 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val namePreference = findPreference<EditTextPreference>("name_string")
         namePreference?.summary = Prefs.getInstance(requireContext()).name
         namePreference?.text = Prefs.getInstance(requireContext()).name
-        namePreference?.setOnPreferenceChangeListener { preference, newValue ->
-            val s = newValue.toString().replace(Regex("\\s+"), " ").trim().toLowerCase().capitalize()
+
+        namePreference?.setOnPreferenceChangeListener { _, newValue ->
+            val s = newValue.toString().replace(Regex("\\s+"), " ").trim()
+                .lowercase(Locale.getDefault())
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             Prefs.getInstance(requireContext()).name = s
-            namePreference?.summary = s
-            namePreference?.text = s
+            namePreference.summary = s
+            namePreference.text = s
             //TODO
             true
         }
 
         val targetPreference = findPreference<EditTextPreference>("target_string")
-
         targetPreference?.summary = Prefs.getInstance(requireContext()).target.toString()
         targetPreference?.text = Prefs.getInstance(requireContext()).target.toString()
-        targetPreference?.setOnPreferenceChangeListener { preference, newValue ->
+
+        targetPreference?.setOnBindEditTextListener {
+            it.inputType = InputType.TYPE_CLASS_NUMBER
+        }
+
+        targetPreference?.setOnPreferenceChangeListener { _, newValue ->
             val n = newValue.toString().replace(" ", "").trim().toInt()
             Prefs.getInstance(requireContext()).target = n
-            targetPreference?.summary = n.toString()
+            targetPreference.summary = n.toString()
             targetPreference.text = n.toString()
-
             true
         }
 
@@ -63,7 +71,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
                     viewModel.clearDatabase()
                     PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().clear()
-                        .commit()
+                        .apply()
 
                     val intent = Intent(it.context, GreetingsActivity::class.java)
                     it.context.startActivity(intent)

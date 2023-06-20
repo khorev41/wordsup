@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "UNCHECKED_CAST")
+
 package sk.upjs.wordsup.fragments
 
 import android.os.Bundle
@@ -8,7 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.button.MaterialButton
-import sk.upjs.wordsup.Prefs
+import sk.upjs.wordsup.prefs.Prefs
 import sk.upjs.wordsup.R
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
 import sk.upjs.wordsup.dao.tries.Try
@@ -70,7 +72,7 @@ class FinishQuizFragment : Fragment() {
     }
 
     fun saveTryToDB() {
-        val tries = Try(0, quiz.quiz.quizId, ((answers.count{it == 1}.div(answers.size.toDouble())).times(100)).toInt(), java.util.Date())
+        val tries = Try(0, quiz.quiz.quizId, ((answers.count{it == 1}.div(answers.size.toDouble())).times(100)).toInt(), Date())
         viewModel.insert(listOf(tries))
     }
 

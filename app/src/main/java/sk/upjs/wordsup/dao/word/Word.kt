@@ -27,8 +27,6 @@ data class Word(
     override fun hashCode(): Int {
         return word.hashCode()
     }
-
-
 }
 @Dao
 interface WordsDao {

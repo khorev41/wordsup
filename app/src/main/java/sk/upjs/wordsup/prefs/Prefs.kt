@@ -1,4 +1,4 @@
-package sk.upjs.wordsup
+package sk.upjs.wordsup.prefs
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -64,6 +64,7 @@ class QuizActivity : AppCompatActivity() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         when (supportFragmentManager.fragments.last()) {
             is QuizPlayFragment -> {

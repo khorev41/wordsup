@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import sk.upjs.wordsup.prefs.Prefs
 import sk.upjs.wordsup.ui.theme.WordsUpTheme
 import kotlin.math.roundToInt
 
@@ -71,7 +72,7 @@ class TargetActivity : ComponentActivity() {
                 Slider(
                     value = sliderValue,
                     onValueChange = {
-                        sliderValue = it.roundToInt().toFloat();
+                        sliderValue = it.roundToInt().toFloat()
                         target = it.roundToInt()
                     },
                     valueRange = 0f..100f,
@@ -110,7 +111,7 @@ class TargetActivity : ComponentActivity() {
 
     }
 
-    fun openMain(context: Context) {
+    private fun openMain(context: Context) {
         context.startActivity(
             Intent(
                 context, MainActivity::class.java

@@ -6,7 +6,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import sk.upjs.wordsup.dao.tries.Try
 import sk.upjs.wordsup.dao.word.Word
 import javax.inject.Inject
 
@@ -16,9 +15,9 @@ class QuizViewModel @Inject constructor(private var repository: QuizRepository) 
     val allQuizzes = repository.quizzes.asLiveData()
     val quizSavedId: MutableLiveData<Long> = MutableLiveData(0)
 
-    fun insertQuiz(list: List<Quiz>) {
+    fun insertQuizWithWord(quiz: QuizWithWords) {
         viewModelScope.launch {
-           repository.insertQuizzes(list)
+           repository.insertQuizWithWords(quiz)
         }
     }
 
@@ -34,9 +33,9 @@ class QuizViewModel @Inject constructor(private var repository: QuizRepository) 
         }
     }
 
-    fun insertTries(tries: List<Try>) {
+    fun insertQuizz(quiz: Quiz) {
         viewModelScope.launch {
-            repository.insertTries(tries)
+            repository.insertQuizzes(quiz)
         }
     }
 

@@ -57,5 +57,7 @@
     <string name="data_clear">All information, including words, attempts and even preloaded quizzes will be removed</string>
 
     <string name="general">General</string>
+    <string name="aproximated_totally_word_answered">~ %1$d</string>
+    <string name="quiz_have_less_4">Quiz have less than 4 words</string>
 
 </resources>

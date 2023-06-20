@@ -46,9 +46,14 @@ interface QuizDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertQuiz(quiz: Quiz): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertQuizWithReplace(quiz: Quiz): Long
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertWord(word: Word): Long
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertWords(words: List<Word>): List<Long>
 
     @Query("SELECT * FROM words WHERE word = :w")
     suspend fun getWord(w: String): Word
@@ -65,7 +70,7 @@ interface QuizDao {
 
     suspend fun insertQuizAndWord(quiz: Quiz, word: Word) : Long {
         var quizID = insertQuiz(quiz)
-        if (quizID == -1L) {
+        if (quizID <= 0L) {
             quizID = quiz.quizId
         }
         val id = insertWord(word)
@@ -78,14 +83,32 @@ interface QuizDao {
 
     }
 
+    suspend fun insertQuizWithWord(quiz: QuizWithWords) {
+        var quizID = insertQuiz(quiz.quiz)
+        if (quizID == -1L) {
+            quizID = quiz.quiz.quizId
+        }
+        val ids = insertWords(quiz.words)
+        for (i in 0..quiz.words.size) {
+            if (ids[i] <= 0L) {
+                insertQuizWordCrossRef(QuizWordCrossRef(getWord(quiz.words[i].word).wordId, quizID))
+            } else {
+                insertQuizWordCrossRef(QuizWordCrossRef(ids[i], quizID))
+            }
+        }
+    }
+
     suspend fun deleteQuizWithWords(quiz: QuizWithWords) {
+        // spravne poradie, inac chyba!!!
         deleteTriesByQuizId(quiz.quiz.quizId)
+
+        deleteQuiz(quiz.quiz)
 
         quiz.words.forEach {
             deleteQuizWordCrossRef(QuizWordCrossRef(it.wordId, quiz.quiz.quizId))
         }
-        deleteQuiz(quiz.quiz)
         deleteWordsIfPossible()
+
 
     }
 
@@ -94,9 +117,6 @@ interface QuizDao {
 
     @Query("DELETE FROM tries WHERE quizId = :quiz")
     suspend fun deleteTriesByQuizId(quiz: Long)
-
-    @Query("SELECT * FROM tries WHERE quizId = :quiz")
-    suspend fun getTriesByQuizId(quiz: Long) : List<Try>
 
     @Insert
     suspend fun insertTries(tries: List<Try>)
@@ -121,6 +141,5 @@ interface QuizDao {
 
     @Query("DELETE FROM QuizWordCrossRef")
     suspend fun deleteAllQuizWordCrossRef()
-
 
 }

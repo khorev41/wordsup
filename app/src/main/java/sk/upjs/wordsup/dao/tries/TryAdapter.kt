@@ -1,5 +1,6 @@
 package sk.upjs.wordsup.dao.tries
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -14,15 +15,15 @@ class TryWithQuizAdapter :
 
     private var unfilteredlist = listOf<TryWithQuiz>()
 
-    class TryWithQuizViewHolder(val binding: TryLayoutBinding) :
+    class TryWithQuizViewHolder(private val binding: TryLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(tries: TryWithQuiz) {
             binding.root.setOnClickListener {}
             binding.root.setOnLongClickListener {
                 true
             }
-
             binding.quizName.text = tries.quiz.name
             binding.percentageCorrect.text = "${tries.attempt.percentage}%"
             binding.datetime.text =  SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(tries.attempt.time)

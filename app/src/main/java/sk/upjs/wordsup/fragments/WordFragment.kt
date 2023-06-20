@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package sk.upjs.wordsup.fragments
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -64,6 +67,7 @@ class WordFragment : Fragment() {
         listenButton = requireView().findViewById(R.id.listen_button)
         recyclerView = requireView().findViewById(R.id.definition_recycler_view)
 
+        //https://www.geeksforgeeks.org/play-audio-from-url-in-android-using-kotlin/
         if (!wordInfo.phonetic.audio.isNullOrBlank()) {
             mediaPlayer.reset()
             mediaPlayer.setDataSource(wordInfo.phonetic.audio)
@@ -82,6 +86,7 @@ class WordFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
 

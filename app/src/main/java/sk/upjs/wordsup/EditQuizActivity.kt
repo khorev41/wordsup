@@ -21,6 +21,7 @@ import sk.upjs.wordsup.dao.quiz.QuizWithWords
 import sk.upjs.wordsup.dao.word.Word
 import sk.upjs.wordsup.dao.word.WordAdapter
 import sk.upjs.wordsup.dao.word.WordViewModel
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -125,10 +126,10 @@ class EditQuizActivity : AppCompatActivity() {
             if (wordTextInput.text.isNullOrBlank()) {
                 wordLayout.error = "Field is empty"
             } else {
-                var word = Word(
-                    0,
-                    wordTextInput.text.toString().replace(Regex("\\s+"), " ").trim().toLowerCase()
-                        .capitalize()
+                val word = Word(
+                    0, wordTextInput.text.toString().replace(Regex("\\s+"), " ").trim().toLowerCase(
+                        Locale.ROOT
+                    ).capitalize(Locale.ROOT)
                 )
                 if (adapter.currentList.contains(word)) {
                     wordLayout.error = "Word is already in quiz"
@@ -136,17 +137,18 @@ class EditQuizActivity : AppCompatActivity() {
                     adapter.addItemAt(0, word)
                     quiz.quiz.name =
                         nameTextField.text.toString().replace(Regex("\\s+"), " ").trim()
-                            .toLowerCase().capitalize()
+                            .toLowerCase(Locale.ROOT).capitalize(Locale.ROOT)
 
                     // priebezne ukladanie lepsie ako vsetky nakoniec
                     quizViewModel.insertQuizAndWord(quiz.quiz, word)
                     quizViewModel.quizSavedId.observe(this) {
-                        quiz.quiz.quizId = it
+                        if (it > 0) {
+                            quiz.quiz.quizId = it
+                        }
                     }
                     wordTextInput.setText("")
                 }
             }
-
             //https://stackoverflow.com/questions/36426129/recyclerview-scroll-to-position-not-working-every-time
             listView.post {
                 listView.smoothScrollToPosition(0)
@@ -158,6 +160,8 @@ class EditQuizActivity : AppCompatActivity() {
             wordLayout.error = null
         }
         nameTextField.addTextChangedListener {
+            name = nameTextField.text.toString().replace(Regex("\\s+"), " ").trim()
+                .toLowerCase(Locale.ROOT).capitalize(Locale.ROOT)
             flag = false
 
         }
@@ -172,7 +176,8 @@ class EditQuizActivity : AppCompatActivity() {
 
         nameTextField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                addButton.performClick()
+                wordTextInput.performClick()
+                wordTextInput.requestFocus()
                 true
             } else false
         }
@@ -182,6 +187,10 @@ class EditQuizActivity : AppCompatActivity() {
                 if (nameTextField.text.isNullOrBlank()) {
                     nameLayout.error = "Name is empty"
                 } else {
+                    quiz.quiz.name =
+                        nameTextField.text.toString().replace(Regex("\\s+"), " ").trim()
+                            .toLowerCase(Locale.ROOT).capitalize(Locale.ROOT)
+                    quizViewModel.insertQuizz(quiz.quiz)
                     quiz.words = adapter.currentList.toMutableList()
                     finish()
                 }
@@ -192,17 +201,12 @@ class EditQuizActivity : AppCompatActivity() {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if(flag){
             finish()
         }else{
-            MaterialAlertDialogBuilder(this).setTitle(getString(R.string.are_you_sure))
-                .setMessage(getString(R.string.changes_will_not_be_saved))
-                .setNegativeButton(getString(R.string.no)) { _, _ ->
-                    // Respond to negative button press
-                }.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    finish()
-                }.show()
+            saveButton.performClick()
         }
 
     }

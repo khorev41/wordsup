@@ -12,6 +12,7 @@ import sk.upjs.wordsup.fragments.HistoryFragment
 import sk.upjs.wordsup.fragments.HomeFragment
 import sk.upjs.wordsup.fragments.LearnFragment
 import sk.upjs.wordsup.fragments.SettingsFragment
+import sk.upjs.wordsup.prefs.Prefs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         if(Prefs.getInstance(applicationContext).date != SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
                 Date()
             )){
-            Prefs.getInstance(applicationContext).learned = 0;
+            Prefs.getInstance(applicationContext).learned = 0
         }
 
         bottomNavigation = findViewById(R.id.bottom_navigation)
@@ -70,8 +71,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    fun openFragment(fragment: Fragment) {
-        var tag = fragment.javaClass.name
+    private fun openFragment(fragment: Fragment) {
+        val tag = fragment.javaClass.name
         val existingFragment = supportFragmentManager.findFragmentByTag(tag)
 
 
@@ -95,13 +96,14 @@ class MainActivity : AppCompatActivity() {
         outState.putString("active_fragment_tag", viewModel.activeFragmentTag)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (supportFragmentManager.fragments.last() is HomeFragment) {
             finish()
         } else {
             try {
                 super.onBackPressed()
-            }catch (e: java.lang.Exception){
+            }catch (_: java.lang.Exception){
 
             }
 

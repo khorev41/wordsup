@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.*
 import com.google.android.material.button.MaterialButton
-import sk.upjs.wordsup.Prefs
+import sk.upjs.wordsup.prefs.Prefs
 import sk.upjs.wordsup.R
 import sk.upjs.wordsup.dao.quiz.QuizWithWords
 import sk.upjs.wordsup.dao.word.Word
